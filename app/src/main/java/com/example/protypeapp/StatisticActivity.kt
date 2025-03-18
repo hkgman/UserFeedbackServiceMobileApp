@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.protypeapp.API.ApiClient
 import com.example.protypeapp.API.ApiService
+import com.example.protypeapp.controller.Listeners.StatisticListener
+import com.example.protypeapp.controller.StatisticController
 import com.example.protypeapp.models.Statistic.GraphData
 import com.example.protypeapp.models.Statistic.ProblemAdapter
 import com.example.protypeapp.models.Statistic.StatisticResponse
@@ -25,12 +27,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class StatisticActivity : AppCompatActivity() {
-    private lateinit var userPreferences:UserPreferences
+class StatisticActivity : AppCompatActivity(),StatisticListener {
+    private lateinit var statisticController: StatisticController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_statistic)
-
+        statisticController = StatisticController(this,this)
         val buttonHuman = findViewById<Button>(R.id.buttonHuman)
         val buttonRobot = findViewById<Button>(R.id.buttonRobot)
         val buttonGood = findViewById<Button>(R.id.buttonGood)
@@ -61,11 +63,11 @@ class StatisticActivity : AppCompatActivity() {
         super.onResume()
         val productId = intent.getIntExtra("product_id", -1)
         if (productId != -1) {
-            fetchStatisticData(productId)
+            statisticController.fetchStatisticData(productId)
         } else {
             Toast.makeText(this, "Ошибка: ID продукта не передан", Toast.LENGTH_SHORT).show()
         }
-        fetchGraphData(productId)
+        statisticController.fetchGraphData(productId)
     }
 
     private fun generateGraph(graphDataList: List<GraphData>) {
@@ -138,84 +140,41 @@ class StatisticActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchGraphData(productId: Int) {
-        val apiService = ApiClient.getClient(this).create(ApiService::class.java)
-        val call = apiService.getGraphInfo(productId)
-
-        call.enqueue(object : Callback<List<GraphData>> {
-            override fun onResponse(call: Call<List<GraphData>>, response: Response<List<GraphData>>) {
-                if (response.isSuccessful) {
-                    val graphDataList = response.body()
-                    graphDataList?.let {
-                        generateGraph(it)
-                    }
-                } else {
-                    Toast.makeText(this@StatisticActivity, "Не удалось получить данные", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<List<GraphData>>, t: Throwable) {
-                Toast.makeText(this@StatisticActivity, "Ошибка сети: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun fetchStatisticData(product_id:Int) {
-        val apiService = ApiClient.getClient(this).create(ApiService::class.java)
-        val call = apiService.getStatistic(product_id)
-
-        call.enqueue(object : Callback<StatisticResponse> {
-            override fun onResponse(call: Call<StatisticResponse>, response: Response<StatisticResponse>) {
-                if (response.isSuccessful) {
-                    val statisticResponse = response.body()
-
-                    statisticResponse?.let {
-                        val moodText = findViewById<TextView>(R.id.moodText)
-                        val moodImage = findViewById<ImageView>(R.id.moodImage)
-                        val answerText = findViewById<TextView>(R.id.textAnswer)
-                        when (it.problemMain) {
-                            "Позитивное" -> {
-                                moodImage.setImageResource(R.drawable.positive)
-                                moodText.text = "Позитивное"
-                            }
-
-                            "Негативное" -> {
-                                moodImage.setImageResource(R.drawable.negative)
-                                moodText.text = "Негативное"
-                            }
-
-                            "Сбалансированное" -> {
-                                moodImage.setImageResource(R.drawable.neutral)
-                                moodText.text = "Сбалансированное"
-                            }
-                        }
-                        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-                        val adapter = ProblemAdapter(it.topProblems)
-                        recyclerView.adapter = adapter
-                        answerText.text = it.answer
-                    }
-                } else {
-                    if (response.code() == 401) {
-                        handleUnauthorizedError()
-                    } else {
-                        val errorResponse = response.errorBody()?.string()
-                        val jsonObject = JSONObject(errorResponse!!)
-                        val errorMessage = jsonObject.optString("message", "Неизвестная ошибка")
-                        Toast.makeText(this@StatisticActivity, errorMessage, Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<StatisticResponse>, t: Throwable) {
-                Toast.makeText(this@StatisticActivity, "Ошибка сети: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-    private fun handleUnauthorizedError() {
-        userPreferences.logout()
-
+    override fun onUnauthorized() {
         val intent = Intent(this@StatisticActivity, MainActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    override fun onGraphInfoReceived(graphDataList: List<GraphData>) {
+        generateGraph(graphDataList)
+    }
+
+    override fun onStatisticInfoReceived(statisticResponse: StatisticResponse?) {
+        statisticResponse?.let {
+            val moodText = findViewById<TextView>(R.id.moodText)
+            val moodImage = findViewById<ImageView>(R.id.moodImage)
+            val answerText = findViewById<TextView>(R.id.textAnswer)
+            when (it.problemMain) {
+                "Позитивное" -> {
+                    moodImage.setImageResource(R.drawable.positive)
+                    moodText.text = "Позитивное"
+                }
+
+                "Негативное" -> {
+                    moodImage.setImageResource(R.drawable.negative)
+                    moodText.text = "Негативное"
+                }
+
+                "Сбалансированное" -> {
+                    moodImage.setImageResource(R.drawable.neutral)
+                    moodText.text = "Сбалансированное"
+                }
+            }
+            val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+            val adapter = ProblemAdapter(it.topProblems)
+            recyclerView.adapter = adapter
+            answerText.text = it.answer
+        }
     }
 }
