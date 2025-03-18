@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/background_color">
+
+    <TextView
+        android:id="@+id/tvRegisterHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Регистрация"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp" />
+
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:hint="Почта"
+        android:padding="12dp"
+        android:background="@drawable/input_background"
+        android:textColor="@color/white"
+        android:textColorHint="@color/hint_color"
+        android:layout_marginBottom="16dp"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/etFullName"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:hint="ФИО"
+        android:padding="12dp"
+        android:background="@drawable/input_background"
+        android:textColor="@color/white"
+        android:textColorHint="@color/hint_color"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:hint="Пароль"
+        android:padding="12dp"
+        android:background="@drawable/input_background"
+        android:textColor="@color/white"
+        android:textColorHint="@color/hint_color"
+        android:layout_marginBottom="16dp"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/etConfirmPassword"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:hint="Подтвердить пароль"
+        android:padding="12dp"
+        android:background="@drawable/input_background"
+        android:textColor="@color/white"
+        android:textColorHint="@color/hint_color"
+        android:layout_marginBottom="20dp"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/button_color"
+        android:text="Зарегистрироваться"
+        android:textColor="@color/white"
+        android:padding="12dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/tvLoginLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Уже есть аккаунт? Войти"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:focusable="true" />
+</LinearLayout>
