@@ -39,7 +39,7 @@ class ReviewNAdapter(private val context: Context, private val reviewList: Mutab
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         val review = reviewList[position]
         holder.userName.text = review.user_name
-        holder.textReview.text = review.text.toString()
+        holder.textReview.text = review.text
         holder.date.text = formatDateString(review.created_date)
         holder.problem.text = review.problem
         holder.mark.text=review.mark.toString()
