@@ -6,6 +6,7 @@ import com.example.protypeapp.API.ApiClient
 import com.example.protypeapp.API.ApiService
 import com.example.protypeapp.controller.Listeners.ReviewListListener
 import com.example.protypeapp.models.Review.Review
+import com.example.protypeapp.models.Review.ReviewResponse
 import com.example.protypeapp.userStorage.UserPreferences
 import org.json.JSONObject
 import retrofit2.Call
@@ -16,57 +17,66 @@ class ReviewListController(private val context: Context,private var  reviewListL
     private val userPreferences = UserPreferences(context)
     private val apiService = ApiClient.getClient(context).create(ApiService::class.java)
 
-    fun fetchPositiveFromServer(productId:Int) {
-        val call = apiService.getPositiveReviews(productId)
+    fun fetchPositiveFromServer(productId: Int, page: Int = 1, perPage: Int = 10) {
+        val call = apiService.getPositiveReviews(productId, page, perPage)
 
-        call.enqueue(object : Callback<List<Review>> {
-            override fun onResponse(call: Call<List<Review>>, response: Response<List<Review>>) {
+        call.enqueue(object : Callback<ReviewResponse> {
+            override fun onResponse(call: Call<ReviewResponse>, response: Response<ReviewResponse>) {
                 if (response.isSuccessful) {
-                    val itemsFromServer = response.body()?.toMutableList() ?: mutableListOf()
-                    reviewListListener.onReviewsReceived(itemsFromServer)
+                    val reviewResponse = response.body()
+                    val reviews = reviewResponse?.reviews ?: emptyList()
+                    if (reviewResponse != null) {
+                        reviewListListener.onReviewsReceived(reviews,reviewResponse.total)
+                    }
                 } else {
                     handleErrorResponse(response)
                 }
             }
 
-            override fun onFailure(call: Call<List<Review>>, t: Throwable) {
+            override fun onFailure(call: Call<ReviewResponse>, t: Throwable) {
                 showMessage("Ошибка сети: ${t.message}")
             }
         })
     }
-    fun fetchGenericFromServer(productId:Int) {
-        val call = apiService.getGenericReviews(productId)
+    fun fetchGenericFromServer(productId: Int, page: Int = 1, perPage: Int = 10) {
+        val call = apiService.getGenericReviews(productId, page, perPage)
 
-        call.enqueue(object : Callback<List<Review>> {
-            override fun onResponse(call: Call<List<Review>>, response: Response<List<Review>>) {
+        call.enqueue(object : Callback<ReviewResponse> {
+            override fun onResponse(call: Call<ReviewResponse>, response: Response<ReviewResponse>) {
                 if (response.isSuccessful) {
-                    val itemsFromServer = response.body()?.toMutableList() ?: mutableListOf()
-                    reviewListListener.onReviewsReceived(itemsFromServer)
+                    val reviewResponse = response.body()
+                    val reviews = reviewResponse?.reviews ?: emptyList()
+                    if (reviewResponse != null) {
+                        reviewListListener.onReviewsReceived(reviews,reviewResponse.total)
+                    }
                 } else {
                     handleErrorResponse(response)
                 }
             }
 
-            override fun onFailure(call: Call<List<Review>>, t: Throwable) {
+            override fun onFailure(call: Call<ReviewResponse>, t: Throwable) {
                 showMessage("Ошибка сети: ${t.message}")
             }
         })
     }
 
-    fun fetchNotGenericFromServer(productId:Int) {
-        val call = apiService.getNotGenericReviews(productId)
+    fun fetchNotGenericFromServer(productId: Int, page: Int = 1, perPage: Int = 10) {
+        val call = apiService.getNotGenericReviews(productId, page, perPage)
 
-        call.enqueue(object : Callback<List<Review>> {
-            override fun onResponse(call: Call<List<Review>>, response: Response<List<Review>>) {
+        call.enqueue(object : Callback<ReviewResponse> {
+            override fun onResponse(call: Call<ReviewResponse>, response: Response<ReviewResponse>) {
                 if (response.isSuccessful) {
-                    val itemsFromServer = response.body()?.toMutableList() ?: mutableListOf()
-                    reviewListListener.onReviewsReceived(itemsFromServer)
+                    val reviewResponse = response.body()
+                    val reviews = reviewResponse?.reviews ?: emptyList()
+                    if (reviewResponse != null) {
+                        reviewListListener.onReviewsReceived(reviews,reviewResponse.total)
+                    }
                 } else {
                     handleErrorResponse(response)
                 }
             }
 
-            override fun onFailure(call: Call<List<Review>>, t: Throwable) {
+            override fun onFailure(call: Call<ReviewResponse>, t: Throwable) {
                 showMessage("Ошибка сети: ${t.message}")
             }
         })

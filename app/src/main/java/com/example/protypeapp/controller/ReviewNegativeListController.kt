@@ -9,6 +9,8 @@ import com.example.protypeapp.controller.Listeners.ReviewListListener
 import com.example.protypeapp.controller.Listeners.ReviewNegativeListListener
 import com.example.protypeapp.models.Review.Review
 import com.example.protypeapp.models.Review.ReviewN
+import com.example.protypeapp.models.Review.ReviewNResponse
+import com.example.protypeapp.models.Review.ReviewResponse
 import com.example.protypeapp.userStorage.UserPreferences
 import org.json.JSONObject
 import retrofit2.Call
@@ -19,20 +21,23 @@ class ReviewNegativeListController(private val context: Context,private var  rev
     private val userPreferences = UserPreferences(context)
     private val apiService = ApiClient.getClient(context).create(ApiService::class.java)
 
-    fun fetchNegativeFromServer(productId:Int) {
-        val call = apiService.getNegativeReviews(productId)
+    fun fetchNegativeFromServer(productId: Int, page: Int = 1, perPage: Int = 10) {
+        val call = apiService.getNegativeReviews(productId, page, perPage)
 
-        call.enqueue(object : Callback<List<ReviewN>> {
-            override fun onResponse(call: Call<List<ReviewN>>, response: Response<List<ReviewN>>) {
+        call.enqueue(object : Callback<ReviewNResponse> {
+            override fun onResponse(call: Call<ReviewNResponse>, response: Response<ReviewNResponse>) {
                 if (response.isSuccessful) {
-                    val itemsFromServer = response.body()?.toMutableList() ?: mutableListOf()
-                    reviewListListener.onReviewsReceived(itemsFromServer)
+                    val reviewResponse = response.body()
+                    val reviews = reviewResponse?.reviews ?: emptyList()
+                    if (reviewResponse != null) {
+                        reviewListListener.onReviewsReceived(reviews,reviewResponse.total)
+                    }
                 } else {
                     handleErrorResponse(response)
                 }
             }
 
-            override fun onFailure(call: Call<List<ReviewN>>, t: Throwable) {
+            override fun onFailure(call: Call<ReviewNResponse>, t: Throwable) {
                 showMessage("Ошибка сети: ${t.message}")
             }
         })
