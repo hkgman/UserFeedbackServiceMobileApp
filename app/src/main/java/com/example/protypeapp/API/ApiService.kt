@@ -30,12 +30,12 @@ interface ApiService {
     @DELETE("/products/{id}")
     fun deleteProduct(@Path("id") productId: Int): Call<Unit>
     //reviews
-    @GET("/reviews/product/{product_id}/generic")
+    @GET("/reviews/{product_id}/generic")
     fun getGenericReviews(@Path("product_id") productId: Int,
                           @Query("page") page: Int,
                           @Query("per_page") perPage: Int
     ): Call<ReviewResponse>
-    @GET("/reviews/product/{product_id}/not-generic")
+    @GET("/reviews/{product_id}/not-generic")
     fun getNotGenericReviews(@Path("product_id") productId: Int,
                              @Query("page") page: Int,
                              @Query("per_page") perPage: Int
@@ -46,7 +46,7 @@ interface ApiService {
         @Query("page") page: Int,
         @Query("per_page") perPage: Int
     ): Call<ReviewResponse>
-    @GET("/reviews/product/{product_id}/negative")
+    @GET("/reviews/{product_id}/negative")
     fun getNegativeReviews(@Path("product_id") productId: Int,
                            @Query("page") page: Int,
                            @Query("per_page") perPage: Int
