@@ -1,4 +1,4 @@
-package com.example.protypeapp.models.Review
+package com.example.protypeapp.utils
 
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager

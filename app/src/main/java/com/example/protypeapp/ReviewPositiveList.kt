@@ -3,17 +3,16 @@ package com.example.protypeapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.protypeapp.controller.Listeners.ReviewListListener
 import com.example.protypeapp.controller.ReviewListController
-import com.example.protypeapp.models.Review.PaginationScrollListener
+import com.example.protypeapp.utils.PaginationScrollListener
 import com.example.protypeapp.models.Review.Review
 import com.example.protypeapp.models.Review.ReviewAdapter
 
-class Review_Positive_List : AppCompatActivity(),ReviewListListener {
+class ReviewPositiveList : AppCompatActivity(),ReviewListListener {
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var productList: MutableList<Review>
     private lateinit var reviewRecyclerView: RecyclerView
@@ -74,7 +73,7 @@ class Review_Positive_List : AppCompatActivity(),ReviewListListener {
     }
 
     override fun onUnauthorized() {
-        val intent = Intent(this@Review_Positive_List, MainActivity::class.java)
+        val intent = Intent(this@ReviewPositiveList, MainActivity::class.java)
         startActivity(intent)
         finish()
     }

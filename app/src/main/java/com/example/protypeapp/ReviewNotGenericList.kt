@@ -3,17 +3,16 @@ package com.example.protypeapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.protypeapp.controller.Listeners.ReviewListListener
 import com.example.protypeapp.controller.ReviewListController
-import com.example.protypeapp.models.Review.PaginationScrollListener
+import com.example.protypeapp.utils.PaginationScrollListener
 import com.example.protypeapp.models.Review.Review
 import com.example.protypeapp.models.Review.ReviewAdapter
 
-class Review_Generic_List : AppCompatActivity(),ReviewListListener {
+class ReviewNotGenericList : AppCompatActivity(),ReviewListListener {
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var productList: MutableList<Review>
     private lateinit var reviewRecyclerView: RecyclerView
@@ -25,9 +24,9 @@ class Review_Generic_List : AppCompatActivity(),ReviewListListener {
     private var productId: Int = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_review_generic_list)
+        setContentView(R.layout.activity_review_not_generic_list)
         reviewRecyclerView = findViewById(R.id.reviewRecyclerView)
-        reviewListController = ReviewListController(this, this)
+        reviewListController = ReviewListController(this,this)
         productList = mutableListOf()
         reviewAdapter = ReviewAdapter(this, productList)
         reviewRecyclerView.adapter = reviewAdapter
@@ -39,31 +38,27 @@ class Review_Generic_List : AppCompatActivity(),ReviewListListener {
         } else {
             showToast("Ошибка: ID продукта не передан")
         }
-
-
         reviewRecyclerView.addOnScrollListener(
-        object : PaginationScrollListener(layoutManager) {
-            override fun loadMoreItems() {
-                if (currentPage < totalPages && !isLoading) {
-                    isLoading = true
-                    currentPage++
-                    loadReviews()
+            object : PaginationScrollListener(layoutManager) {
+                override fun loadMoreItems() {
+                    if (currentPage < totalPages && !isLoading) {
+                        isLoading = true
+                        currentPage++
+                        loadReviews()
+                    }
                 }
-            }
 
-            override fun isLastPage(): Boolean {
-                return currentPage >= totalPages
-            }
+                override fun isLastPage(): Boolean {
+                    return currentPage >= totalPages
+                }
 
-            override fun isLoading(): Boolean {
-                return isLoading
-            }
-        })
+                override fun isLoading(): Boolean {
+                    return isLoading
+                }
+            })
     }
-
-
     private fun loadReviews() {
-        reviewListController.fetchGenericFromServer(productId, currentPage, perPage)
+        reviewListController.fetchNotGenericFromServer(productId, currentPage, perPage)
     }
 
     override fun onReviewsReceived(reviews: List<Review>,total: Int) {
@@ -76,8 +71,9 @@ class Review_Generic_List : AppCompatActivity(),ReviewListListener {
         totalPages=total
     }
 
+
     override fun onUnauthorized() {
-        val intent = Intent(this@Review_Generic_List, MainActivity::class.java)
+        val intent = Intent(this@ReviewNotGenericList, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
@@ -89,4 +85,5 @@ class Review_Generic_List : AppCompatActivity(),ReviewListListener {
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
 }

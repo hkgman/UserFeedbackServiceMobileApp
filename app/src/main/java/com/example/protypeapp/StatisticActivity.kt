@@ -32,19 +32,19 @@ class StatisticActivity : AppCompatActivity(),StatisticListener {
         val buttonBad = findViewById<Button>(R.id.buttonBad)
 
         buttonHuman.setOnClickListener {
-            navigateToReviewActivity(Review_Not_Generic_List::class.java)
+            navigateToReviewActivity(ReviewNotGenericList::class.java)
         }
 
         buttonRobot.setOnClickListener {
-            navigateToReviewActivity(Review_Generic_List::class.java)
+            navigateToReviewActivity(ReviewGenericList::class.java)
         }
 
         buttonGood.setOnClickListener {
-            navigateToReviewActivity(Review_Positive_List::class.java)
+            navigateToReviewActivity(ReviewPositiveList::class.java)
         }
 
         buttonBad.setOnClickListener {
-            navigateToReviewActivity(Review_Negative_List::class.java)
+            navigateToReviewActivity(ReviewNegativeList::class.java)
         }
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
@@ -73,8 +73,8 @@ class StatisticActivity : AppCompatActivity(),StatisticListener {
         val negativeColors = mutableListOf<Int>()
 
         for (i in graphDataList.indices) {
-            val positiveCount = graphDataList[i].positive_count as Int
-            val negativeCount = graphDataList[i].negative_count as Int
+            val positiveCount = graphDataList[i].positiveCount as Int
+            val negativeCount = graphDataList[i].negativeCount as Int
 
             if (positiveCount > negativeCount) {
                 positiveEntries.add(BarEntry(i.toFloat(), positiveCount.toFloat()))
@@ -93,7 +93,7 @@ class StatisticActivity : AppCompatActivity(),StatisticListener {
                 negativeColors.add(android.graphics.Color.YELLOW)
             }
 
-            dates.add(graphDataList[i].created_date as String)
+            dates.add(graphDataList[i].createdDate as String)
         }
 
         val positiveDataSet = BarDataSet(positiveEntries, "Positive Count")

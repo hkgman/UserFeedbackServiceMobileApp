@@ -3,21 +3,21 @@ package com.example.protypeapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.protypeapp.controller.Listeners.ReviewListListener
-import com.example.protypeapp.controller.ReviewListController
-import com.example.protypeapp.models.Review.PaginationScrollListener
-import com.example.protypeapp.models.Review.Review
-import com.example.protypeapp.models.Review.ReviewAdapter
+import com.example.protypeapp.controller.Listeners.ReviewNegativeListListener
+import com.example.protypeapp.controller.ReviewNegativeListController
+import com.example.protypeapp.utils.PaginationScrollListener
+import com.example.protypeapp.models.Review.ReviewN
+import com.example.protypeapp.models.Review.ReviewNAdapter
 
-class Review_Not_Generic_List : AppCompatActivity(),ReviewListListener {
-    private lateinit var reviewAdapter: ReviewAdapter
-    private lateinit var productList: MutableList<Review>
+class ReviewNegativeList : AppCompatActivity(),ReviewNegativeListListener {
+    private lateinit var reviewAdapter: ReviewNAdapter
+    private lateinit var productList: MutableList<ReviewN>
     private lateinit var reviewRecyclerView: RecyclerView
-    private lateinit var reviewListController: ReviewListController
+    private lateinit var reviewNegativeListController: ReviewNegativeListController
+
     private var currentPage = 1
     private val perPage = 10
     private var isLoading = false
@@ -25,11 +25,11 @@ class Review_Not_Generic_List : AppCompatActivity(),ReviewListListener {
     private var productId: Int = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_review_not_generic_list)
+        setContentView(R.layout.activity_review_negative_list)
         reviewRecyclerView = findViewById(R.id.reviewRecyclerView)
-        reviewListController = ReviewListController(this,this)
+        reviewNegativeListController = ReviewNegativeListController(this,this)
         productList = mutableListOf()
-        reviewAdapter = ReviewAdapter(this, productList)
+        reviewAdapter = ReviewNAdapter(this, productList)
         reviewRecyclerView.adapter = reviewAdapter
         val layoutManager = LinearLayoutManager(this)
         reviewRecyclerView.layoutManager = layoutManager
@@ -39,30 +39,30 @@ class Review_Not_Generic_List : AppCompatActivity(),ReviewListListener {
         } else {
             showToast("Ошибка: ID продукта не передан")
         }
-        reviewRecyclerView.addOnScrollListener(
-            object : PaginationScrollListener(layoutManager) {
-                override fun loadMoreItems() {
-                    if (currentPage < totalPages && !isLoading) {
-                        isLoading = true
-                        currentPage++
-                        loadReviews()
-                    }
+        reviewRecyclerView.addOnScrollListener(object : PaginationScrollListener(layoutManager) {
+            override fun loadMoreItems() {
+                if (currentPage < totalPages && !isLoading) {
+                    isLoading = true
+                    currentPage++
+                    loadReviews()
                 }
+            }
 
-                override fun isLastPage(): Boolean {
-                    return currentPage >= totalPages
-                }
+            override fun isLastPage(): Boolean {
+                return currentPage >= totalPages
+            }
 
-                override fun isLoading(): Boolean {
-                    return isLoading
-                }
-            })
+            override fun isLoading(): Boolean {
+                return isLoading
+            }
+        })
     }
+
     private fun loadReviews() {
-        reviewListController.fetchNotGenericFromServer(productId, currentPage, perPage)
+        reviewNegativeListController.fetchNegativeFromServer(productId, currentPage, perPage)
     }
 
-    override fun onReviewsReceived(reviews: List<Review>,total: Int) {
+    override fun onReviewsReceived(reviews: List<ReviewN>, total: Int) {
         if (currentPage == 1) {
             productList.clear()
         }
@@ -72,13 +72,11 @@ class Review_Not_Generic_List : AppCompatActivity(),ReviewListListener {
         totalPages=total
     }
 
-
     override fun onUnauthorized() {
-        val intent = Intent(this@Review_Not_Generic_List, MainActivity::class.java)
+        val intent = Intent(this@ReviewNegativeList, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
-
     override fun onError(message: String) {
         showToast(message)
     }

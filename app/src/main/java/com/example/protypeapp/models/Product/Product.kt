@@ -1,12 +1,12 @@
 package com.example.protypeapp.models.Product
 
-class Product (
+data class Product (
     val id: Int,
-    val product_name: String,
-    val supplier_article: String,
-    val supplier_name: String = "Default Supplier",
-    val brand_name: String = "Default Brand",
-    val product_url: String,
+    val productName: String,
+    val supplierArticle: String,
+    val supplierName: String = "Default Supplier",
+    val brandName: String = "Default Brand",
+    val productUrl: String,
     val status: String,
-    val image_url: String
+    val imageUrl: String
 )

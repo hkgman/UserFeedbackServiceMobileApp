@@ -19,28 +19,28 @@
             android:name=".UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".Review_Negative_List"
+            android:name=".ReviewNegativeList"
             android:exported="false" />
         <activity
-            android:name=".Review_Not_Generic_List"
+            android:name=".ReviewNotGenericList"
             android:exported="false" />
         <activity
-            android:name=".Review_Generic_List"
+            android:name=".ReviewGenericList"
             android:exported="false" />
         <activity
-            android:name=".Review_Positive_List"
+            android:name=".ReviewPositiveList"
             android:exported="false" />
         <activity
-            android:name=".Item_Review_Negative"
+            android:name=".ItemReviewNegative"
             android:exported="false" />
         <activity
-            android:name=".Item_Review_Not_Negative"
+            android:name=".ItemReviewNotNegative"
             android:exported="false" />
         <activity
             android:name=".StatisticActivity"
             android:exported="false" />
         <activity
-            android:name=".item_product"
+            android:name=".ItemProduct"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"

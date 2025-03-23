@@ -26,7 +26,7 @@ class ReviewAdapter(private val context: Context, private val reviewList: Mutabl
             LayoutInflater.from(context).inflate(R.layout.activity_item_review_not_negative, parent, false)
         return ReviewViewHolder(view)
     }
-    fun formatDateString(dateString: String): String {
+    private fun formatDateString(dateString: String): String {
         return try {
             val inputFormat = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)
             val outputFormat = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
@@ -38,9 +38,9 @@ class ReviewAdapter(private val context: Context, private val reviewList: Mutabl
     }
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         val review = reviewList[position]
-        holder.userName.text = review.user_name
+        holder.userName.text = review.userName
         holder.textReview.text = review.text.toString()
-        holder.date.text = formatDateString(review.created_date)
+        holder.date.text = formatDateString(review.createdDate)
         holder.mark.text=review.mark.toString()
     }
 

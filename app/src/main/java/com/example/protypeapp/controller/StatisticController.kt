@@ -17,7 +17,7 @@ class StatisticController(private val context: Context,private val listener: Sta
     private val userPreferences = UserPreferences(context)
     private val apiService = ApiClient.getClient(context).create(ApiService::class.java)
 
-    fun fetchGraphData(productId: Int) {
+        fun fetchGraphData(productId: Int) {
         val call = apiService.getGraphInfo(productId)
 
         call.enqueue(object : Callback<List<GraphData>> {

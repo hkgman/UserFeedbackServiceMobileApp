@@ -3,6 +3,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -18,7 +19,6 @@ import com.example.protypeapp.models.Product.Product
 import com.example.protypeapp.models.Product.ProductAdapter
 import com.example.protypeapp.models.Product.ProductAdd
 import com.example.protypeapp.models.User.UserInfo
-import com.example.protypeapp.userStorage.UserPreferences
 
 class HomeActivity : AppCompatActivity(), HomeListener {
     private lateinit var homeController: HomeController
@@ -64,6 +64,7 @@ class HomeActivity : AppCompatActivity(), HomeListener {
             val productName = findViewById<EditText>(R.id.etTextField).text.toString()
             if (productName.isNotEmpty()) {
                 val newProduct = ProductAdd("productName", "New Supplier", "New Supplier", "Skibidi", productName)
+                Log.d("dff",productName)
                 homeController.addProduct(newProduct)
                 findViewById<EditText>(R.id.etTextField).text.clear()
             }
@@ -83,8 +84,8 @@ class HomeActivity : AppCompatActivity(), HomeListener {
         productAdapter.onItemClickListener = { product ->
             val intent = Intent(this, StatisticActivity::class.java).apply {
                 putExtra("product_id", product.id)
-                putExtra("product_name", product.product_name)
-                putExtra("supplier_name", product.supplier_name)
+                putExtra("product_name", product.productName)
+                putExtra("supplier_name", product.supplierName)
             }
             startActivity(intent)
         }

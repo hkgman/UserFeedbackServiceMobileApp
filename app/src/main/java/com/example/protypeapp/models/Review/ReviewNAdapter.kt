@@ -11,9 +11,9 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class ReviewNAdapter(private val context: Context, private val reviewList: MutableList<ReviewN>) :
-    RecyclerView.Adapter<ReviewNAdapter.ReviewViewHolder>() {
+    RecyclerView.Adapter<ReviewNAdapter.ReviewNViewHolder>() {
 
-    inner class ReviewViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ReviewNViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val userName: TextView = view.findViewById(R.id.userName)
         val textReview: TextView = view.findViewById(R.id.textReview)
         val date: TextView = view.findViewById(R.id.date)
@@ -21,12 +21,12 @@ class ReviewNAdapter(private val context: Context, private val reviewList: Mutab
         val mark: TextView = view.findViewById(R.id.ratingNumber)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewNViewHolder {
         val view =
             LayoutInflater.from(context).inflate(R.layout.activity_item_review_negative, parent, false)
-        return ReviewViewHolder(view)
+        return ReviewNViewHolder(view)
     }
-    fun formatDateString(dateString: String): String {
+    private fun formatDateString(dateString: String): String {
         return try {
             val inputFormat = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)
             val outputFormat = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
@@ -36,11 +36,11 @@ class ReviewNAdapter(private val context: Context, private val reviewList: Mutab
             dateString
         }
     }
-    override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ReviewNViewHolder, position: Int) {
         val review = reviewList[position]
-        holder.userName.text = review.user_name
+        holder.userName.text = review.userName
         holder.textReview.text = review.text
-        holder.date.text = formatDateString(review.created_date)
+        holder.date.text = formatDateString(review.createdDate)
         holder.problem.text = review.problem
         holder.mark.text=review.mark.toString()
     }

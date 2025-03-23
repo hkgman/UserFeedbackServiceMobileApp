@@ -49,15 +49,15 @@ class ProductAdapter(private val context: Context, private val productList: Muta
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
-        holder.productNameTextView.text = product.product_name
+        holder.productNameTextView.text = product.productName
         holder.idTextView.text = product.id.toString()
-        holder.supplierNameTextView.text = product.brand_name
-        Picasso.get().load(product.image_url).resize(48,48).centerCrop().placeholder(R.drawable.photo).into(holder.ivProductImage);
+        holder.supplierNameTextView.text = product.brandName
+        Picasso.get().load(product.imageUrl).resize(48,48).centerCrop().placeholder(R.drawable.photo).into(holder.ivProductImage);
         if (product.status == "LOADING") {
             holder.itemView.alpha = 0.6f
             holder.itemView.isEnabled = true
             holder.deleteButton.visibility = View.GONE
-            holder.productNameTextView.text = "🔄 ${product.product_name}"
+            holder.productNameTextView.text = "🔄 ${product.productName}"
             holder.itemContainer.setBackgroundResource(R.drawable.custom_card_background_loading)
         } else {
             holder.itemView.alpha = 1.0f

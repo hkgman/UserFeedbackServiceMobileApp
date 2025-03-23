@@ -1,8 +1,8 @@
 package com.example.protypeapp.models.Review
 
 class Review (
-    val user_name: String,
+    val userName: String,
     val text: String,
-    val created_date: String,
+    val createdDate: String,
     val mark: Int,
 )

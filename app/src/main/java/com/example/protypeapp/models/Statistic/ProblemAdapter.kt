@@ -22,7 +22,7 @@ class ProblemAdapter(private val problems: List<String>) : RecyclerView.Adapter<
     class ProblemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val textView: TextView = itemView.findViewById(android.R.id.text1)
 
-        fun bind(problem: String) {
+            fun bind(problem: String) {
             textView.text = problem
         }
     }
