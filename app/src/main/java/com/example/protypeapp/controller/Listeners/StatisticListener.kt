@@ -7,4 +7,5 @@ interface StatisticListener {
     fun onUnauthorized()
     fun onGraphInfoReceived(graphDataList: List<GraphData>)
     fun onStatisticInfoReceived(statisticResponse: StatisticResponse?)
+    fun onError(message: String)
 }

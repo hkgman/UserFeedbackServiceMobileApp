@@ -8,4 +8,8 @@ interface HomeListener {
     fun onUserInfoReceived(user: UserInfo)
     fun onUserImageReceived(bitmap: Bitmap?)
     fun onProductsReceived(products: List<Product>)
+    fun onProductAdded()
+    fun onProductDeleted()
+    fun onUserNotAuthorized()
+    fun onError(message: String)
 }

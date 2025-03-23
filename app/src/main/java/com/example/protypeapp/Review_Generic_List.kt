@@ -7,18 +7,11 @@ import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.protypeapp.API.ApiClient
-import com.example.protypeapp.API.ApiService
 import com.example.protypeapp.controller.Listeners.ReviewListListener
 import com.example.protypeapp.controller.ReviewListController
 import com.example.protypeapp.models.Review.PaginationScrollListener
 import com.example.protypeapp.models.Review.Review
 import com.example.protypeapp.models.Review.ReviewAdapter
-import com.example.protypeapp.userStorage.UserPreferences
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class Review_Generic_List : AppCompatActivity(),ReviewListListener {
     private lateinit var reviewAdapter: ReviewAdapter
@@ -44,7 +37,7 @@ class Review_Generic_List : AppCompatActivity(),ReviewListListener {
         if (productId != -1) {
             loadReviews()
         } else {
-            Toast.makeText(this, "Ошибка: ID продукта не передан", Toast.LENGTH_SHORT).show()
+            showToast("Ошибка: ID продукта не передан")
         }
 
 
@@ -59,7 +52,6 @@ class Review_Generic_List : AppCompatActivity(),ReviewListListener {
             }
 
             override fun isLastPage(): Boolean {
-                Log.d("dddd", "$currentPage > $totalPages")
                 return currentPage >= totalPages
             }
 
@@ -88,5 +80,13 @@ class Review_Generic_List : AppCompatActivity(),ReviewListListener {
         val intent = Intent(this@Review_Generic_List, MainActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    override fun onError(message: String) {
+        showToast(message)
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

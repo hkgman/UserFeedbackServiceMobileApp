@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,14 +30,11 @@ class HomeActivity : AppCompatActivity(), HomeListener {
         setContentView(R.layout.activity_home)
 
         homeController = HomeController(this, this)
-
-        if (!UserPreferences(this).isLoggedIn()) {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
+        homeController.checkAuthorization()
 
         setupViews()
         setupListeners()
+
         homeController.fetchProducts()
         homeController.fetchUserInfo()
     }
@@ -103,5 +101,28 @@ class HomeActivity : AppCompatActivity(), HomeListener {
 
     override fun onProductsReceived(products: List<Product>) {
         productAdapter.updateItems(products.toMutableList())
+    }
+
+    override fun onProductAdded() {
+        showToast("Продукт добавлен")
+        homeController.fetchProducts()
+    }
+
+    override fun onProductDeleted() {
+        showToast("Продукт удален")
+        homeController.fetchProducts()
+    }
+
+    override fun onUserNotAuthorized() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
+    override fun onError(message: String) {
+        showToast(message)
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

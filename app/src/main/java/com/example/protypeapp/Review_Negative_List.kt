@@ -7,19 +7,11 @@ import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.protypeapp.API.ApiClient
-import com.example.protypeapp.API.ApiService
 import com.example.protypeapp.controller.Listeners.ReviewNegativeListListener
 import com.example.protypeapp.controller.ReviewNegativeListController
 import com.example.protypeapp.models.Review.PaginationScrollListener
-import com.example.protypeapp.models.Review.Review
 import com.example.protypeapp.models.Review.ReviewN
 import com.example.protypeapp.models.Review.ReviewNAdapter
-import com.example.protypeapp.userStorage.UserPreferences
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class Review_Negative_List : AppCompatActivity(),ReviewNegativeListListener {
     private lateinit var reviewAdapter: ReviewNAdapter
@@ -46,7 +38,7 @@ class Review_Negative_List : AppCompatActivity(),ReviewNegativeListListener {
         if (productId != -1) {
             loadReviews()
         } else {
-            Toast.makeText(this, "Ошибка: ID продукта не передан", Toast.LENGTH_SHORT).show()
+            showToast("Ошибка: ID продукта не передан")
         }
         reviewRecyclerView.addOnScrollListener(object : PaginationScrollListener(layoutManager) {
             override fun loadMoreItems() {
@@ -58,7 +50,6 @@ class Review_Negative_List : AppCompatActivity(),ReviewNegativeListListener {
             }
 
             override fun isLastPage(): Boolean {
-                Log.d("dddd","$currentPage > $totalPages")
                 return currentPage >= totalPages
             }
 
@@ -87,4 +78,12 @@ class Review_Negative_List : AppCompatActivity(),ReviewNegativeListListener {
         startActivity(intent)
         finish()
     }
+    override fun onError(message: String) {
+        showToast(message)
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
 }

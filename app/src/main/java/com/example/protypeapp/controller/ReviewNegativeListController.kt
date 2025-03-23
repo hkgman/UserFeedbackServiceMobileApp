@@ -5,12 +5,8 @@ import android.content.Context
 import android.widget.Toast
 import com.example.protypeapp.API.ApiClient
 import com.example.protypeapp.API.ApiService
-import com.example.protypeapp.controller.Listeners.ReviewListListener
 import com.example.protypeapp.controller.Listeners.ReviewNegativeListListener
-import com.example.protypeapp.models.Review.Review
-import com.example.protypeapp.models.Review.ReviewN
 import com.example.protypeapp.models.Review.ReviewNResponse
-import com.example.protypeapp.models.Review.ReviewResponse
 import com.example.protypeapp.userStorage.UserPreferences
 import org.json.JSONObject
 import retrofit2.Call
@@ -38,7 +34,7 @@ class ReviewNegativeListController(private val context: Context,private var  rev
             }
 
             override fun onFailure(call: Call<ReviewNResponse>, t: Throwable) {
-                showMessage("Ошибка сети: ${t.message}")
+                reviewListListener.onError("Ошибка сети: ${t.message}")
             }
         })
     }
@@ -50,7 +46,7 @@ class ReviewNegativeListController(private val context: Context,private var  rev
             val errorResponse = response.errorBody()?.string()
             val jsonObject = JSONObject(errorResponse ?: "{}")
             val errorMessage = jsonObject.optString("message", "Неизвестная ошибка")
-            showMessage(errorMessage)
+            reviewListListener.onError(errorMessage)
         }
     }
 
@@ -59,7 +55,4 @@ class ReviewNegativeListController(private val context: Context,private var  rev
         reviewListListener.onUnauthorized()
     }
 
-    private fun showMessage(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-    }
 }

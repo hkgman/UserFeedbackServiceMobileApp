@@ -9,23 +9,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.protypeapp.API.ApiClient
-import com.example.protypeapp.API.ApiService
 import com.example.protypeapp.controller.Listeners.StatisticListener
 import com.example.protypeapp.controller.StatisticController
 import com.example.protypeapp.models.Statistic.GraphData
 import com.example.protypeapp.models.Statistic.ProblemAdapter
 import com.example.protypeapp.models.Statistic.StatisticResponse
-import com.example.protypeapp.userStorage.UserPreferences
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class StatisticActivity : AppCompatActivity(),StatisticListener {
     private lateinit var statisticController: StatisticController
@@ -65,7 +58,7 @@ class StatisticActivity : AppCompatActivity(),StatisticListener {
         if (productId != -1) {
             statisticController.fetchStatisticData(productId)
         } else {
-            Toast.makeText(this, "Ошибка: ID продукта не передан", Toast.LENGTH_SHORT).show()
+            showToast("Ошибка: ID продукта не найден")
         }
         statisticController.fetchGraphData(productId)
     }
@@ -136,7 +129,7 @@ class StatisticActivity : AppCompatActivity(),StatisticListener {
             intent.putExtra("product_id", productId)
             startActivity(intent)
         } else {
-            Toast.makeText(this, "Ошибка: ID продукта не найден", Toast.LENGTH_SHORT).show()
+            showToast("Ошибка: ID продукта не найден")
         }
     }
 
@@ -176,5 +169,12 @@ class StatisticActivity : AppCompatActivity(),StatisticListener {
             recyclerView.adapter = adapter
             answerText.text = it.answer
         }
+    }
+    override fun onError(message: String) {
+        showToast(message)
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

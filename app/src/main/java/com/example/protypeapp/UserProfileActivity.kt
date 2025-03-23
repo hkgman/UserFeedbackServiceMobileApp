@@ -19,9 +19,9 @@ import com.example.protypeapp.controller.Listeners.UserProfileListener
 import com.example.protypeapp.controller.UserProfileController
 import com.example.protypeapp.models.User.UserInfo
 import com.example.protypeapp.userStorage.UserPreferences
+import com.example.protypeapp.utils.Utils
 
-
-class UserProfileActivity : AppCompatActivity(),UserProfileListener {
+class UserProfileActivity : AppCompatActivity(), UserProfileListener {
     private lateinit var image: ImageView
     private lateinit var textFio: EditText
     private lateinit var textEmail: EditText
@@ -32,23 +32,30 @@ class UserProfileActivity : AppCompatActivity(),UserProfileListener {
 
     private var initialFio: String = ""
     private var initialEmail: String = ""
-    private var initialImage: Bitmap? = null
     private var isImageChanged = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
 
+        setupViews()
+        setupListeners()
+
+        userPreferences = UserPreferences(this)
+        controller = UserProfileController(this, this)
+        controller.fetchUserInfo()
+        controller.checkAuthorization()
+    }
+
+    private fun setupViews() {
         image = findViewById(R.id.ivProfileImage)
         textFio = findViewById(R.id.etFullName)
         textEmail = findViewById(R.id.etEmail)
         editButton = findViewById(R.id.btnEdit)
         exitButton = findViewById(R.id.btnExit)
+    }
 
-        userPreferences = UserPreferences(this)
-        controller = UserProfileController(this,this)
-        controller.fetchUserInfo()
-
+    private fun setupListeners() {
         setupChangeListeners()
 
         editButton.setOnClickListener {
@@ -57,32 +64,24 @@ class UserProfileActivity : AppCompatActivity(),UserProfileListener {
 
         exitButton.setOnClickListener {
             userPreferences.logout()
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
 
         image.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, Companion.REQUEST_CODE_PICK_IMAGE)
+            startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE)
         }
     }
 
     private fun setupChangeListeners() {
-        textFio.addTextChangedListener {
-            checkForChanges()
-        }
-
-        textEmail.addTextChangedListener {
-            checkForChanges()
-        }
+        textFio.addTextChangedListener { checkForChanges() }
+        textEmail.addTextChangedListener { checkForChanges() }
     }
 
     private fun checkForChanges() {
-        val isFioChanged = textFio.text.toString() != initialFio
-        val isEmailChanged = textEmail.text.toString() != initialEmail
-
-        editButton.isEnabled = isFioChanged || isEmailChanged || isImageChanged
+        editButton.isEnabled = textFio.text.toString() != initialFio ||
+                textEmail.text.toString() != initialEmail || isImageChanged
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -103,50 +102,38 @@ class UserProfileActivity : AppCompatActivity(),UserProfileListener {
                     isImageChanged = true
                     checkForChanges()
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Не удалось загрузить изображение", Toast.LENGTH_SHORT).show()
+                    showToast("Не удалось загрузить изображение")
                 }
             }
         }
     }
 
-
     companion object {
         private const val REQUEST_CODE_PICK_IMAGE = 100
     }
 
-
     private fun updateUser() {
         val fioText = textFio.text.toString().trim()
-        val drawable = image.drawable
-        val image = if (drawable is BitmapDrawable) {
-            val bitmap = drawable.bitmap
-            bitmap
-        } else {
-            null
-        }
+        val imageBitmap = (image.drawable as? BitmapDrawable)?.bitmap
         val email = textEmail.text.toString()
-        showPasswordDialog { password ->
-            controller.updateUser(fioText,email,image,password)
-        }
 
+        showPasswordDialog { password ->
+            controller.updateUser(fioText, email, imageBitmap, password)
+        }
     }
+
     private fun showPasswordDialog(onPasswordEntered: (String) -> Unit) {
-        val input = EditText(this)
-        input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        val input = EditText(this).apply {
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
 
         AlertDialog.Builder(this)
             .setTitle("Введите пароль")
             .setView(input)
-            .setPositiveButton("ОК") { dialog, which ->
-                val password = input.text.toString()
-                onPasswordEntered(password)
-            }
-            .setNegativeButton("Отмена") { dialog, which ->
-                dialog.cancel()
-            }
+            .setPositiveButton("ОК") { _, _ -> onPasswordEntered(input.text.toString()) }
+            .setNegativeButton("Отмена", null)
             .show()
     }
-
 
     override fun onUserInfoReceived(user: UserInfo) {
         initialFio = "${user.surname} ${user.name} ${user.patronymic}"
@@ -156,29 +143,32 @@ class UserProfileActivity : AppCompatActivity(),UserProfileListener {
         textEmail.setText(initialEmail)
 
         if (user.image != null && user.image != "none") {
-            val imageBytes = controller.decodeBase64(user.image)
-            if (imageBytes != null) {
-                image.setImageBitmap(imageBytes)
-                initialImage = imageBytes
-            } else {
-                image.setImageResource(R.drawable.person)
-            }
+            val imageBytes = Utils.decodeBase64(user.image)
+            image.setImageBitmap(imageBytes)
         } else {
             image.setImageResource(R.drawable.person)
         }
     }
 
     override fun onUserImageReceived(image: Bitmap?) {
-        if (image != null) {
-            this.image.setImageBitmap(image)
-        } else {
-            this.image.setImageResource(R.drawable.person)
-        }
+        image?.let { this.image.setImageBitmap(it) }
+            ?: this.image.setImageResource(R.drawable.person)
+    }
+
+    override fun showMessage(message: String) {
+        showToast(message)
+    }
+
+    override fun showError(message: String) {
+        showToast(message)
     }
 
     override fun onUnauthorized() {
-        val intent = Intent(this@UserProfileActivity, MainActivity::class.java)
-        startActivity(intent)
+        startActivity(Intent(this@UserProfileActivity, MainActivity::class.java))
         finish()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

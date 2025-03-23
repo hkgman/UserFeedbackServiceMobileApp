@@ -5,7 +5,6 @@ import android.widget.Toast
 import com.example.protypeapp.API.ApiClient
 import com.example.protypeapp.API.ApiService
 import com.example.protypeapp.controller.Listeners.ReviewListListener
-import com.example.protypeapp.models.Review.Review
 import com.example.protypeapp.models.Review.ReviewResponse
 import com.example.protypeapp.userStorage.UserPreferences
 import org.json.JSONObject
@@ -34,7 +33,7 @@ class ReviewListController(private val context: Context,private var  reviewListL
             }
 
             override fun onFailure(call: Call<ReviewResponse>, t: Throwable) {
-                showMessage("Ошибка сети: ${t.message}")
+                reviewListListener.onError("Ошибка сети: ${t.message}")
             }
         })
     }
@@ -55,7 +54,7 @@ class ReviewListController(private val context: Context,private var  reviewListL
             }
 
             override fun onFailure(call: Call<ReviewResponse>, t: Throwable) {
-                showMessage("Ошибка сети: ${t.message}")
+                reviewListListener.onError("Ошибка сети: ${t.message}")
             }
         })
     }
@@ -77,7 +76,7 @@ class ReviewListController(private val context: Context,private var  reviewListL
             }
 
             override fun onFailure(call: Call<ReviewResponse>, t: Throwable) {
-                showMessage("Ошибка сети: ${t.message}")
+                reviewListListener.onError("Ошибка сети: ${t.message}")
             }
         })
     }
@@ -88,16 +87,12 @@ class ReviewListController(private val context: Context,private var  reviewListL
             val errorResponse = response.errorBody()?.string()
             val jsonObject = JSONObject(errorResponse ?: "{}")
             val errorMessage = jsonObject.optString("message", "Неизвестная ошибка")
-            showMessage(errorMessage)
+            reviewListListener.onError(errorMessage)
         }
     }
 
     private fun handleUnauthorizedError() {
         userPreferences.logout()
         reviewListListener.onUnauthorized()
-    }
-
-    private fun showMessage(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 }

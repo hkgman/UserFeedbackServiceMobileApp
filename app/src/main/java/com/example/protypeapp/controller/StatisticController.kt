@@ -1,18 +1,11 @@
 package com.example.protypeapp.controller
 
 import android.content.Context
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.recyclerview.widget.RecyclerView
 import com.example.protypeapp.API.ApiClient
 import com.example.protypeapp.API.ApiService
-import com.example.protypeapp.API.AuthService
-import com.example.protypeapp.R
 import com.example.protypeapp.controller.Listeners.StatisticListener
-import com.example.protypeapp.controller.Listeners.UserProfileListener
 import com.example.protypeapp.models.Statistic.GraphData
-import com.example.protypeapp.models.Statistic.ProblemAdapter
 import com.example.protypeapp.models.Statistic.StatisticResponse
 import com.example.protypeapp.userStorage.UserPreferences
 import org.json.JSONObject
@@ -40,7 +33,7 @@ class StatisticController(private val context: Context,private val listener: Sta
             }
 
             override fun onFailure(call: Call<List<GraphData>>, t: Throwable) {
-                showMessage("Ошибка сети: ${t.message}")
+                listener.onError("Ошибка сети: ${t.message}")
             }
         })
     }
@@ -59,7 +52,7 @@ class StatisticController(private val context: Context,private val listener: Sta
             }
 
             override fun onFailure(call: Call<StatisticResponse>, t: Throwable) {
-                showMessage("Ошибка сети: ${t.message}")
+                listener.onError("Ошибка сети: ${t.message}")
             }
         })
     }
@@ -71,7 +64,7 @@ class StatisticController(private val context: Context,private val listener: Sta
             val errorResponse = response.errorBody()?.string()
             val jsonObject = JSONObject(errorResponse ?: "{}")
             val errorMessage = jsonObject.optString("message", "Неизвестная ошибка")
-            showMessage(errorMessage)
+            listener.onError(errorMessage)
         }
     }
 
@@ -79,9 +72,4 @@ class StatisticController(private val context: Context,private val listener: Sta
         userPreferences.logout()
         listener.onUnauthorized()
     }
-
-    private fun showMessage(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-    }
-
 }
