@@ -83,9 +83,9 @@ class HomeActivity : AppCompatActivity(), HomeListener {
 
         productAdapter.onItemClickListener = { product ->
             val intent = Intent(this, StatisticActivity::class.java).apply {
-                putExtra("product_id", product.id)
-                putExtra("product_name", product.productName)
-                putExtra("supplier_name", product.supplierName)
+                putExtra("productId", product.id)
+                putExtra("productName", product.productName)
+                putExtra("supplierName", product.supplierName)
             }
             startActivity(intent)
         }

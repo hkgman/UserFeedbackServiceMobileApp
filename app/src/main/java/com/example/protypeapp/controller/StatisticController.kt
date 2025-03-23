@@ -1,6 +1,7 @@
 package com.example.protypeapp.controller
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.example.protypeapp.API.ApiClient
 import com.example.protypeapp.API.ApiService
@@ -17,7 +18,7 @@ class StatisticController(private val context: Context,private val listener: Sta
     private val userPreferences = UserPreferences(context)
     private val apiService = ApiClient.getClient(context).create(ApiService::class.java)
 
-        fun fetchGraphData(productId: Int) {
+    fun fetchGraphData(productId: Int) {
         val call = apiService.getGraphInfo(productId)
 
         call.enqueue(object : Callback<List<GraphData>> {
@@ -38,8 +39,8 @@ class StatisticController(private val context: Context,private val listener: Sta
         })
     }
 
-     fun fetchStatisticData(product_id:Int) {
-        val call = apiService.getStatistic(product_id)
+     fun fetchStatisticData(productId:Int) {
+        val call = apiService.getStatistic(productId)
 
         call.enqueue(object : Callback<StatisticResponse> {
             override fun onResponse(call: Call<StatisticResponse>, response: Response<StatisticResponse>) {

@@ -33,7 +33,7 @@ class ReviewNegativeList : AppCompatActivity(),ReviewNegativeListListener {
         reviewRecyclerView.adapter = reviewAdapter
         val layoutManager = LinearLayoutManager(this)
         reviewRecyclerView.layoutManager = layoutManager
-        productId = intent.getIntExtra("product_id", -1)
+        productId = intent.getIntExtra("productId", -1)
         if (productId != -1) {
             loadReviews()
         } else {

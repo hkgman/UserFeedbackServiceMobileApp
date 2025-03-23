@@ -2,6 +2,7 @@ package com.example.protypeapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -54,7 +55,7 @@ class StatisticActivity : AppCompatActivity(),StatisticListener {
     }
     override fun onResume() {
         super.onResume()
-        val productId = intent.getIntExtra("product_id", -1)
+        val productId = intent.getIntExtra("productId", -1)
         if (productId != -1) {
             statisticController.fetchStatisticData(productId)
         } else {
@@ -99,8 +100,8 @@ class StatisticActivity : AppCompatActivity(),StatisticListener {
         val positiveDataSet = BarDataSet(positiveEntries, "Positive Count")
         val negativeDataSet = BarDataSet(negativeEntries, "Negative Count")
 
-        positiveDataSet.setColors(positiveColors)
-        negativeDataSet.setColors(negativeColors)
+        positiveDataSet.colors = positiveColors
+        negativeDataSet.colors = negativeColors
 
         val barData = BarData(positiveDataSet, negativeDataSet)
         barData.setDrawValues(true)
@@ -123,10 +124,10 @@ class StatisticActivity : AppCompatActivity(),StatisticListener {
     }
 
     private fun navigateToReviewActivity(activityClass: Class<*>) {
-        val productId = intent.getIntExtra("product_id", -1)
+        val productId = intent.getIntExtra("productId", -1)
         if (productId != -1) {
             val intent = Intent(this, activityClass)
-            intent.putExtra("product_id", productId)
+            intent.putExtra("productId", productId)
             startActivity(intent)
         } else {
             showToast("Ошибка: ID продукта не найден")
