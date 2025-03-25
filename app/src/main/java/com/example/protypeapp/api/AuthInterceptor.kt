@@ -4,12 +4,13 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.protypeapp.userStorage.UserPreferences
 
 class AuthInterceptor(context: Context) : Interceptor {
-    private val sharedPreferences: SharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+    private val userPreferences = UserPreferences(context)
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val token = sharedPreferences.getString("auth_token", null)
+        val token = userPreferences.getToken()
 
         val request = chain.request()
         val url = request.url().toString()
