@@ -77,6 +77,7 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
                 editable?.let {
                     searchString=it.toString()
                     if (searchString.isEmpty()) {
+                        currentPage=1
                         loadReviews()
                     }
                 }

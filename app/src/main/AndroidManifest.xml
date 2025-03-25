@@ -22,22 +22,7 @@
             android:name=".UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ReviewNegativeList"
-            android:exported="false" />
-        <activity
-            android:name=".ReviewNotGenericList"
-            android:exported="false" />
-        <activity
-            android:name=".ReviewGenericList"
-            android:exported="false" />
-        <activity
-            android:name=".ReviewPositiveList"
-            android:exported="false" />
-        <activity
-            android:name=".ItemReviewNegative"
-            android:exported="false" />
-        <activity
-            android:name=".ItemReviewNotNegative"
+            android:name=".ItemReview"
             android:exported="false" />
         <activity
             android:name=".StatisticActivity"

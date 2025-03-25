@@ -18,7 +18,7 @@
         android:layout_marginEnd="16dp"
         android:src="@drawable/photo"
         android:contentDescription="Product Image"
-         android:scaleType="centerCrop" />
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -44,6 +44,7 @@
             android:text="Supplier Name"
             android:textColor="@color/black"
             android:textSize="14sp" />
+
         <EditText
             android:id="@+id/hiddenInput"
             android:layout_width="wrap_content"
@@ -51,6 +52,7 @@
             android:visibility="gone"
             android:inputType="none" />
     </LinearLayout>
+
     <Button
         android:id="@+id/buttonAction"
         android:layout_width="wrap_content"
@@ -58,5 +60,5 @@
         android:text="-"
         android:backgroundTint="@android:color/holo_red_dark"
         android:textColor="@android:color/white"
-        android:layout_gravity="end" />
+        android:layout_gravity="end|center_vertical" /> <!-- Кнопка справа и по центру вертикально -->
 </LinearLayout>
