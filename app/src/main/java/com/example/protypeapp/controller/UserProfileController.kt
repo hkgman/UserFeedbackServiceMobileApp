@@ -2,12 +2,12 @@ package com.example.protypeapp.controller
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.example.protypeapp.API.ApiClient
-import com.example.protypeapp.API.ApiService
-import com.example.protypeapp.controller.Listeners.UserProfileListener
-import com.example.protypeapp.models.User.UpdateUserRequest
-import com.example.protypeapp.models.User.UpdateUserResponse
-import com.example.protypeapp.models.User.UserInfo
+import com.example.protypeapp.api.ApiClient
+import com.example.protypeapp.api.ApiService
+import com.example.protypeapp.controller.listeners.UserProfileListener
+import com.example.protypeapp.models.user.UpdateUserRequest
+import com.example.protypeapp.models.user.UpdateUserResponse
+import com.example.protypeapp.models.user.UserInfo
 import com.example.protypeapp.userStorage.UserPreferences
 import com.example.protypeapp.utils.Utils
 import retrofit2.Call

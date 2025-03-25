@@ -1,18 +1,12 @@
 package com.example.protypeapp.controller
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Base64
-import android.widget.Toast
-import com.example.protypeapp.API.ApiClient
-import com.example.protypeapp.API.ApiService
-import com.example.protypeapp.MainActivity
-import com.example.protypeapp.controller.Listeners.HomeListener
-import com.example.protypeapp.models.Product.Product
-import com.example.protypeapp.models.Product.ProductAdd
-import com.example.protypeapp.models.User.UserInfo
+import com.example.protypeapp.api.ApiClient
+import com.example.protypeapp.api.ApiService
+import com.example.protypeapp.controller.listeners.HomeListener
+import com.example.protypeapp.models.product.Product
+import com.example.protypeapp.models.product.ProductAdd
+import com.example.protypeapp.models.user.UserInfo
 import com.example.protypeapp.userStorage.UserPreferences
 import com.example.protypeapp.utils.Utils
 import org.json.JSONObject

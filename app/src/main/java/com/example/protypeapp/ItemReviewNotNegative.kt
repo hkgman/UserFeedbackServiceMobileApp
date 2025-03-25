@@ -6,6 +6,6 @@ import android.os.Bundle
 class ItemReviewNotNegative : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_item_review_not_negative)
+        setContentView(R.layout.activity_item_review)
     }
 }

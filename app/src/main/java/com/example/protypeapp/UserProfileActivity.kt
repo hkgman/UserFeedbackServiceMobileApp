@@ -15,9 +15,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import com.example.protypeapp.controller.Listeners.UserProfileListener
+import com.example.protypeapp.controller.listeners.UserProfileListener
 import com.example.protypeapp.controller.UserProfileController
-import com.example.protypeapp.models.User.UserInfo
+import com.example.protypeapp.models.user.UserInfo
 import com.example.protypeapp.userStorage.UserPreferences
 import com.example.protypeapp.utils.Utils
 

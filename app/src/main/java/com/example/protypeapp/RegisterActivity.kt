@@ -8,8 +8,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.example.protypeapp.controller.AuthController
-import com.example.protypeapp.controller.Listeners.AuthListener
-import com.example.protypeapp.models.Auth.RegisterRequest
+import com.example.protypeapp.controller.listeners.AuthListener
 
 class RegisterActivity : AppCompatActivity(),AuthListener {
     private lateinit var authController: AuthController

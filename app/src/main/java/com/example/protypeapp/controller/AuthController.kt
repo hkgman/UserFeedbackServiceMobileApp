@@ -2,17 +2,16 @@ package com.example.protypeapp.controller
 
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
-import com.example.protypeapp.API.ApiClient
-import com.example.protypeapp.API.AuthService
+import com.example.protypeapp.api.ApiClient
+import com.example.protypeapp.api.AuthService
 import com.example.protypeapp.HomeActivity
 import com.example.protypeapp.MainActivity
 import com.example.protypeapp.RegisterActivity
-import com.example.protypeapp.controller.Listeners.AuthListener
-import com.example.protypeapp.models.Auth.LoginResponse
-import com.example.protypeapp.models.Auth.RegisterRequest
-import com.example.protypeapp.models.Auth.RegisterResponse
-import com.example.protypeapp.models.Auth.UserRequest
+import com.example.protypeapp.controller.listeners.AuthListener
+import com.example.protypeapp.models.auth.LoginResponse
+import com.example.protypeapp.models.auth.RegisterRequest
+import com.example.protypeapp.models.auth.RegisterResponse
+import com.example.protypeapp.models.auth.UserRequest
 import com.example.protypeapp.userStorage.UserPreferences
 import org.json.JSONObject
 import retrofit2.Call

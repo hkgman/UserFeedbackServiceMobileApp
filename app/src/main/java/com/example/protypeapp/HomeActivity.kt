@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.protypeapp.controller.HomeController
-import com.example.protypeapp.controller.Listeners.HomeListener
-import com.example.protypeapp.models.Product.Product
-import com.example.protypeapp.models.Product.ProductAdapter
-import com.example.protypeapp.models.Product.ProductAdd
-import com.example.protypeapp.models.User.UserInfo
+import com.example.protypeapp.controller.listeners.HomeListener
+import com.example.protypeapp.models.product.Product
+import com.example.protypeapp.models.product.ProductAdapter
+import com.example.protypeapp.models.product.ProductAdd
+import com.example.protypeapp.models.user.UserInfo
 
 class HomeActivity : AppCompatActivity(), HomeListener {
     private lateinit var homeController: HomeController

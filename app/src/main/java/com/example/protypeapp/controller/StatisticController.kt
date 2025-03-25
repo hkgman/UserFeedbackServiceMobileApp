@@ -1,13 +1,11 @@
 package com.example.protypeapp.controller
 
 import android.content.Context
-import android.util.Log
-import android.widget.Toast
-import com.example.protypeapp.API.ApiClient
-import com.example.protypeapp.API.ApiService
-import com.example.protypeapp.controller.Listeners.StatisticListener
-import com.example.protypeapp.models.Statistic.GraphData
-import com.example.protypeapp.models.Statistic.StatisticResponse
+import com.example.protypeapp.api.ApiClient
+import com.example.protypeapp.api.ApiService
+import com.example.protypeapp.controller.listeners.StatisticListener
+import com.example.protypeapp.models.statistic.GraphData
+import com.example.protypeapp.models.statistic.StatisticResponse
 import com.example.protypeapp.userStorage.UserPreferences
 import org.json.JSONObject
 import retrofit2.Call
@@ -17,6 +15,12 @@ import retrofit2.Response
 class StatisticController(private val context: Context,private val listener: StatisticListener) {
     private val userPreferences = UserPreferences(context)
     private val apiService = ApiClient.getClient(context).create(ApiService::class.java)
+
+    fun checkAuthorization() {
+        if (!userPreferences.isLoggedIn()) {
+            listener.onUnauthorized()
+        }
+    }
 
     fun fetchGraphData(productId: Int) {
         val call = apiService.getGraphInfo(productId)

@@ -2,7 +2,6 @@ package com.example.protypeapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,11 +9,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.protypeapp.controller.Listeners.StatisticListener
+import com.example.protypeapp.controller.listeners.StatisticListener
 import com.example.protypeapp.controller.StatisticController
-import com.example.protypeapp.models.Statistic.GraphData
-import com.example.protypeapp.models.Statistic.ProblemAdapter
-import com.example.protypeapp.models.Statistic.StatisticResponse
+import com.example.protypeapp.models.statistic.GraphData
+import com.example.protypeapp.models.statistic.ProblemAdapter
+import com.example.protypeapp.models.statistic.StatisticResponse
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -23,35 +22,23 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
 class StatisticActivity : AppCompatActivity(),StatisticListener {
     private lateinit var statisticController: StatisticController
+    private lateinit var buttonAll: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_statistic)
         statisticController = StatisticController(this,this)
-        val buttonHuman = findViewById<Button>(R.id.buttonHuman)
-        val buttonRobot = findViewById<Button>(R.id.buttonRobot)
-        val buttonGood = findViewById<Button>(R.id.buttonGood)
-        val buttonBad = findViewById<Button>(R.id.buttonBad)
+        statisticController.checkAuthorization()
+        setupViews()
+    }
 
-        buttonHuman.setOnClickListener {
-            navigateToReviewActivity(ReviewNotGenericList::class.java)
+    private fun setupViews() {
+        buttonAll = findViewById<Button>(R.id.buttonAll)
+
+        buttonAll.setOnClickListener {
+            navigateToReviewActivity(ReviewListActivity::class.java)
         }
-
-        buttonRobot.setOnClickListener {
-            navigateToReviewActivity(ReviewGenericList::class.java)
-        }
-
-        buttonGood.setOnClickListener {
-            navigateToReviewActivity(ReviewPositiveList::class.java)
-        }
-
-        buttonBad.setOnClickListener {
-            navigateToReviewActivity(ReviewNegativeList::class.java)
-        }
-
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-
-
     }
     override fun onResume() {
         super.onResume()
