@@ -3,6 +3,7 @@ package com.example.protypeapp.api
 import com.example.protypeapp.models.statistic.GraphData
 import com.example.protypeapp.models.product.Product
 import com.example.protypeapp.models.product.ProductAdd
+import com.example.protypeapp.models.product.ProductResponse
 import com.example.protypeapp.models.review.ReviewResponse
 import com.example.protypeapp.models.statistic.StatisticResponse
 import com.example.protypeapp.models.user.UpdateUserRequest
@@ -21,7 +22,8 @@ interface ApiService {
 
     //products
     @GET("/products/byUser/")
-    fun getProducts(): Call<List<Product>>
+    fun getProducts(@Query("page") page: Int,
+                    @Query("per_page") perPage: Int): Call<ProductResponse>
     @POST("/products/")
     fun addProduct(@Body product: ProductAdd): Call<Product>
     @DELETE("/products/{id}")

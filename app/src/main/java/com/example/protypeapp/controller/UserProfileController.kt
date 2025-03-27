@@ -10,6 +10,7 @@ import com.example.protypeapp.models.user.UpdateUserResponse
 import com.example.protypeapp.models.user.UserInfo
 import com.example.protypeapp.userStorage.UserPreferences
 import com.example.protypeapp.utils.Utils
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -72,10 +73,18 @@ class UserProfileController(private val context: Context, private val listener: 
 
     private fun handleErrorResponse(response: Response<*>) {
         if (response.code() == 401) {
-            userPreferences.logout()
-            listener.onUnauthorized()
+            handleUnauthorizedError()
+            listener.showError("Время сеанса истекло. Пожалуйста, войдите снова.")
         } else {
-            listener.showError("Неизвестная ошибка: ${response.message()}")
+            val errorResponse = response.errorBody()?.string()
+            val jsonObject = JSONObject(errorResponse ?: "{}")
+            val errorMessage = jsonObject.optString("message", "Неизвестная ошибка")
+            listener.showError(errorMessage)
         }
     }
+    private fun handleUnauthorizedError() {
+        userPreferences.logout()
+        listener.onUnauthorized()
+    }
+
 }

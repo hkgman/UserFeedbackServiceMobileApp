@@ -130,7 +130,13 @@ class ReviewListController(private val context: Context,private var  reviewListL
     private fun handleErrorResponse(response: Response<*>) {
         if (response.code() == 401) {
             handleUnauthorizedError()
-        } else {
+            reviewListListener.onError("Время сеанса истекло. Пожалуйста, войдите снова.")
+        }
+        else
+        {
+            if(response.code() == 404){
+                handleNotFoundError()
+            }
             val errorResponse = response.errorBody()?.string()
             val jsonObject = JSONObject(errorResponse ?: "{}")
             val errorMessage = jsonObject.optString("message", "Неизвестная ошибка")
@@ -141,5 +147,9 @@ class ReviewListController(private val context: Context,private var  reviewListL
     private fun handleUnauthorizedError() {
         userPreferences.logout()
         reviewListListener.onUnauthorized()
+    }
+
+    private fun handleNotFoundError() {
+        reviewListListener.onNotFound()
     }
 }

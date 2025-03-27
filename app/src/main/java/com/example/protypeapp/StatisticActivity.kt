@@ -127,6 +127,12 @@ class StatisticActivity : AppCompatActivity(),StatisticListener {
         finish()
     }
 
+    override fun onNotFound() {
+        val intent = Intent(this@StatisticActivity, HomeActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     override fun onGraphInfoReceived(graphDataList: List<GraphData>) {
         generateGraph(graphDataList)
     }

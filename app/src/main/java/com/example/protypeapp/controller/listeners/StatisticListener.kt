@@ -5,7 +5,9 @@ import com.example.protypeapp.models.statistic.StatisticResponse
 
 interface StatisticListener {
     fun onUnauthorized()
+    fun onNotFound()
     fun onGraphInfoReceived(graphDataList: List<GraphData>)
     fun onStatisticInfoReceived(statisticResponse: StatisticResponse?)
     fun onError(message: String)
+
 }

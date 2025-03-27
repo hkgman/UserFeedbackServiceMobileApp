@@ -79,9 +79,4 @@ class ProductAdapter(private val context: Context, private val productList: Muta
         notifyItemInserted(productList.size - 1)
     }
 
-    fun updateItems(newItems: List<Product>) {
-        productList.clear()
-        productList.addAll(newItems)
-        notifyDataSetChanged()  // Обновляем весь список
-    }
 }

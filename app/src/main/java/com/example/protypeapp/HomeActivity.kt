@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -12,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.protypeapp.controller.HomeController
 import com.example.protypeapp.controller.listeners.HomeListener
@@ -19,12 +21,17 @@ import com.example.protypeapp.models.product.Product
 import com.example.protypeapp.models.product.ProductAdapter
 import com.example.protypeapp.models.product.ProductAdd
 import com.example.protypeapp.models.user.UserInfo
+import com.example.protypeapp.utils.PaginationScrollListener
 
 class HomeActivity : AppCompatActivity(), HomeListener {
     private lateinit var homeController: HomeController
     private lateinit var productAdapter: ProductAdapter
     private lateinit var productList: MutableList<Product>
-
+    private lateinit var productRecyclerView: RecyclerView
+    private var currentPage = 1
+    private val perPage = 4
+    private var isLoading = false
+    private var totalPages = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -33,29 +40,29 @@ class HomeActivity : AppCompatActivity(), HomeListener {
         homeController.checkAuthorization()
 
         setupViews()
-        setupListeners()
 
-        homeController.fetchProducts()
+        loadProducts()
         homeController.fetchUserInfo()
     }
 
     override fun onResume() {
         super.onResume()
+        currentPage = 1
         homeController.fetchProducts()
         homeController.fetchUserInfo()
     }
 
     private fun setupViews() {
+        productRecyclerView = findViewById(R.id.productRecyclerView)
         productList = mutableListOf()
         productAdapter = ProductAdapter(this, productList)
-
-        findViewById<RecyclerView>(R.id.productRecyclerView).apply {
-            layoutManager = LinearLayoutManager(this@HomeActivity)
-            adapter = productAdapter
-        }
+        productRecyclerView.adapter = productAdapter
+        val layoutManager = LinearLayoutManager(this)
+        productRecyclerView.layoutManager = layoutManager
+        setupListeners(layoutManager)
     }
 
-    private fun setupListeners() {
+    private fun setupListeners(layoutManager:LinearLayoutManager) {
         findViewById<Button>(R.id.btnProfile).setOnClickListener {
             startActivity(Intent(this, UserProfileActivity::class.java))
         }
@@ -70,7 +77,23 @@ class HomeActivity : AppCompatActivity(), HomeListener {
             }
         }
 
+        productRecyclerView.addOnScrollListener(
+            object : PaginationScrollListener(layoutManager) {
+                override fun loadMoreItems() {
+                    if (currentPage < totalPages && !isLoading) {
+                        isLoading = true
+                        currentPage++
+                        loadProducts()
+                    }
+                }
+
+                override fun isLastPage(): Boolean = currentPage >= totalPages
+
+                override fun isLoading(): Boolean = isLoading
+            })
+
         findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout).setOnRefreshListener {
+            currentPage = 1
             homeController.fetchProducts()
             findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout).isRefreshing = false
         }
@@ -91,6 +114,9 @@ class HomeActivity : AppCompatActivity(), HomeListener {
         }
     }
 
+    private fun loadProducts() {
+        homeController.fetchProducts(currentPage, perPage)
+    }
     override fun onUserInfoReceived(user: UserInfo) {
         findViewById<TextView>(R.id.user_info).text = "${user.surname} ${user.name} ${user.patronymic}"
     }
@@ -100,12 +126,19 @@ class HomeActivity : AppCompatActivity(), HomeListener {
         imageView.setImageBitmap(bitmap ?: BitmapFactory.decodeResource(resources, R.drawable.person))
     }
 
-    override fun onProductsReceived(products: List<Product>) {
-        productAdapter.updateItems(products.toMutableList())
+    override fun onProductsReceived(products: List<Product>,total:Int) {
+        if (currentPage == 1) {
+            productList.clear()
+        }
+        productList.addAll(products)
+        productAdapter.notifyDataSetChanged()
+        isLoading = false
+        totalPages=total
     }
 
     override fun onProductAdded() {
         showToast("Продукт добавлен")
+        currentPage = 1
         homeController.fetchProducts()
     }
 

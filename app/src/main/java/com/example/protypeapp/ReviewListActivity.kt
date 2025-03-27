@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +27,7 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
     private lateinit var reviewListController: ReviewListController
     private lateinit var radioGroup: RadioGroup
     private lateinit var editText: EditText
+    private lateinit var view: TextView
     private lateinit var buttonSearch: Button
     private var currentPage = 1
     private val perPage = 10
@@ -53,7 +56,7 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
         reviewRecyclerView = findViewById(R.id.reviewAllRecyclerView)
         editText = findViewById(R.id.etTextField)
         radioGroup = findViewById(R.id.radio_group)
-
+        view = findViewById(R.id.tv_no_items)
         reviewList = mutableListOf()
         reviewListAdapter = ReviewListAdapter(this, reviewList)
 
@@ -138,10 +141,21 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
         reviewListAdapter.notifyDataSetChanged()
         isLoading = false
         totalPages=total
+        if (reviews.isEmpty()) {
+            view.visibility = View.VISIBLE
+        } else {
+            view.visibility = View.GONE
+        }
     }
 
     override fun onUnauthorized() {
         val intent = Intent(this@ReviewListActivity, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onNotFound() {
+        val intent = Intent(this@ReviewListActivity, HomeActivity::class.java)
         startActivity(intent)
         finish()
     }

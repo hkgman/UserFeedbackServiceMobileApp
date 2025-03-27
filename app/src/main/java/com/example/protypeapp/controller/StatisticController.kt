@@ -65,8 +65,14 @@ class StatisticController(private val context: Context,private val listener: Sta
     private fun handleErrorResponse(response: Response<*>) {
         if (response.code() == 401) {
             handleUnauthorizedError()
-        } else {
-            val errorResponse = response.errorBody()?.string()
+            listener.onError("Время сеанса истекло. Пожалуйста, войдите снова.")
+        }
+        else
+        {
+            if(response.code() == 404){
+                handleNotFoundError()
+            }
+            val errorResponse = response.errorBody()?.string()?.trim()
             val jsonObject = JSONObject(errorResponse ?: "{}")
             val errorMessage = jsonObject.optString("message", "Неизвестная ошибка")
             listener.onError(errorMessage)
@@ -76,5 +82,9 @@ class StatisticController(private val context: Context,private val listener: Sta
     private fun handleUnauthorizedError() {
         userPreferences.logout()
         listener.onUnauthorized()
+    }
+
+    private fun handleNotFoundError() {
+        listener.onNotFound()
     }
 }

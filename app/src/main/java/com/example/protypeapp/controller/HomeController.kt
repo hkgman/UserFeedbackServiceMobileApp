@@ -6,6 +6,7 @@ import com.example.protypeapp.api.ApiService
 import com.example.protypeapp.controller.listeners.HomeListener
 import com.example.protypeapp.models.product.Product
 import com.example.protypeapp.models.product.ProductAdd
+import com.example.protypeapp.models.product.ProductResponse
 import com.example.protypeapp.models.user.UserInfo
 import com.example.protypeapp.userStorage.UserPreferences
 import com.example.protypeapp.utils.Utils
@@ -45,19 +46,23 @@ class HomeController(private val context: Context, private val listener: HomeLis
         })
     }
 
-    fun fetchProducts() {
-        val call = apiService.getProducts()
+    fun fetchProducts(page: Int = 1, perPage: Int = 4) {
+        val call = apiService.getProducts(page,perPage)
 
-        call.enqueue(object : Callback<List<Product>> {
-            override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
+        call.enqueue(object : Callback<ProductResponse> {
+            override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
                 if (response.isSuccessful) {
-                    listener.onProductsReceived(response.body()?.toMutableList() ?: mutableListOf())
+                    val productResponse = response.body()
+                    val products = productResponse?.products ?: emptyList()
+                    if (productResponse != null) {
+                        listener.onProductsReceived(products,productResponse.total)
+                    }
                 } else {
                     handleErrorResponse(response)
                 }
             }
 
-            override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
                 listener.onError("Ошибка сети: ${t.message}")
             }
         })
@@ -103,6 +108,7 @@ class HomeController(private val context: Context, private val listener: HomeLis
     private fun handleErrorResponse(response: Response<*>) {
         if (response.code() == 401) {
             handleUnauthorizedError()
+            listener.onError("Время сеанса истекло. Пожалуйста, войдите снова.")
         } else {
             val errorResponse = response.errorBody()?.string()
             val jsonObject = JSONObject(errorResponse ?: "{}")
