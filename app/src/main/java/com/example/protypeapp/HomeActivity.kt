@@ -144,6 +144,7 @@ class HomeActivity : AppCompatActivity(), HomeListener {
 
     override fun onProductDeleted() {
         showToast("Продукт удален")
+        currentPage = 1
         homeController.fetchProducts()
     }
 
