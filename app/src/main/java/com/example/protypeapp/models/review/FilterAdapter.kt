@@ -26,7 +26,7 @@ class FilterAdapter(
         init {
             view.setOnClickListener {
                 val previousPosition = selectedPosition
-                selectedPosition = adapterPosition
+                selectedPosition = bindingAdapterPosition
                 notifyItemChanged(previousPosition)
                 notifyItemChanged(selectedPosition)
                 onFilterSelected(selectedPosition)

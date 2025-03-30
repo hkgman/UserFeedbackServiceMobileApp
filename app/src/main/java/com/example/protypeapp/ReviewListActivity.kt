@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.protypeapp.controller.ReviewListController
 import com.example.protypeapp.controller.listeners.ReviewListListener
+import com.example.protypeapp.models.review.FilterAdapter
 import com.example.protypeapp.models.review.Review
 import com.example.protypeapp.models.review.ReviewListAdapter
 import com.example.protypeapp.utils.PaginationScrollListener
@@ -25,7 +26,8 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
     private lateinit var reviewList: MutableList<Review>
     private lateinit var reviewRecyclerView: RecyclerView
     private lateinit var reviewListController: ReviewListController
-    private lateinit var radioGroup: RadioGroup
+    private lateinit var recyclerViewFilter: RecyclerView
+    private lateinit var filterAdapter: FilterAdapter
     private lateinit var editText: EditText
     private lateinit var view: TextView
     private lateinit var buttonSearch: Button
@@ -35,6 +37,7 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
     private var totalPages = 1
     private var productId: Int = -1
     private var searchString = ""
+    private var selectedFilter = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_review_list)
@@ -55,7 +58,23 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
     private fun setupViews() {
         reviewRecyclerView = findViewById(R.id.reviewAllRecyclerView)
         editText = findViewById(R.id.etTextField)
-        radioGroup = findViewById(R.id.radio_group)
+        recyclerViewFilter = findViewById(R.id.filterRecyclerView)
+        var filters = listOf(
+            "Все",
+            "Сгенерированные",
+            "Не сгенерированные",
+            "Позитивные",
+            "Негативные"
+        )
+        filterAdapter = FilterAdapter(filters){
+            currentPage=1
+            selectedFilter=it
+            loadReviews()
+        }
+        recyclerViewFilter.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+
+        recyclerViewFilter.adapter=filterAdapter
         view = findViewById(R.id.tv_no_items)
         reviewList = mutableListOf()
         reviewListAdapter = ReviewListAdapter(this, reviewList)
@@ -111,26 +130,20 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
             loadReviews()
             findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout).isRefreshing = false
         }
-
-        radioGroup.setOnCheckedChangeListener { _, _ ->
-            currentPage = 1  // Сбрасываем текущую страницу при смене фильтра
-            loadReviews()
-        }
     }
 
     private fun loadReviews() {
-        // Сбрасываем список отзывов перед загрузкой новых
         if (currentPage == 1) {
             reviewList.clear()
             reviewListAdapter.notifyDataSetChanged()
         }
 
-        when (radioGroup.checkedRadioButtonId) {
-            R.id.radio_all -> reviewListController.fetchAllFromServer(productId, currentPage, perPage, searchString)
-            R.id.radio_positive -> reviewListController.fetchPositiveFromServer(productId, currentPage, perPage, searchString)
-            R.id.radio_ai -> reviewListController.fetchGenericFromServer(productId, currentPage, perPage, searchString)
-            R.id.radio_human -> reviewListController.fetchNotGenericFromServer(productId, currentPage, perPage, searchString)
-            R.id.radio_negative -> reviewListController.fetchNegativeFromServer(productId, currentPage, perPage, searchString)
+        when (selectedFilter) {
+            0 -> reviewListController.fetchAllFromServer(productId, currentPage, perPage, searchString)
+            3 -> reviewListController.fetchPositiveFromServer(productId, currentPage, perPage, searchString)
+            1 -> reviewListController.fetchGenericFromServer(productId, currentPage, perPage, searchString)
+            2 -> reviewListController.fetchNotGenericFromServer(productId, currentPage, perPage, searchString)
+            4 -> reviewListController.fetchNegativeFromServer(productId, currentPage, perPage, searchString)
             else -> reviewListController.fetchAllFromServer(productId, currentPage, perPage, searchString)
         }
     }
