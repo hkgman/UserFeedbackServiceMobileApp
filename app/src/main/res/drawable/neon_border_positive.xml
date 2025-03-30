@@ -1,0 +1,21 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape>
+            <gradient
+                android:startColor="@color/neon_glow_positive"
+                android:centerColor="@color/neon_glow_positive"
+                android:endColor="@color/neon_border_positive"
+                android:angle="45"/>
+            <corners android:radius="14dp"/>
+        </shape>
+    </item>
+
+    <item android:left="6dp" android:top="6dp" android:right="6dp" android:bottom="6dp">
+        <shape>
+            <solid android:color="@android:color/white"/>
+            <corners android:radius="10dp"/>
+        </shape>
+    </item>
+
+</layer-list>

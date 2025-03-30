@@ -7,26 +7,25 @@
     android:gravity="center_vertical"
     android:background="@drawable/custom_card_background"
     android:layout_marginBottom="12dp"
-    android:elevation="8dp"
-    android:layout_marginTop="12dp">
+    android:layout_marginTop="12dp"
+    android:elevation="4dp">
 
+    <!-- Иконка пользователя -->
     <ImageView
         android:id="@+id/ivReviewImage"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="12dp"
         android:src="@drawable/person"
-        android:contentDescription="Product Image"
-        android:scaleType="centerCrop" />
+        android:contentDescription="User Image"
+        android:scaleType="centerCrop"
+        android:layout_marginStart="12dp"/> <!-- Добавлен отступ -->
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:elevation="8dp"
-        android:layout_marginBottom="12dp"
-        android:layout_marginTop="12dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/userName"
@@ -51,6 +50,7 @@
             android:text="10.12.2024 19:56"
             android:textColor="@color/black"
             android:textSize="14sp" />
+
         <TextView
             android:id="@+id/problem"
             android:layout_width="wrap_content"
@@ -58,14 +58,15 @@
             android:text="Problem"
             android:textColor="@color/black"
             android:textSize="14sp" />
-
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginStart="16dp">
+        android:layout_marginStart="12dp"
+        android:minWidth="64dp"> <!-- Добавлено минимальное ограничение по ширине -->
 
         <TextView
             android:id="@+id/ratingNumber"
@@ -74,15 +75,15 @@
             android:text="5"
             android:textColor="@color/black"
             android:textSize="20sp"
-        android:layout_marginEnd="12dp" />
-
+            android:layout_marginEnd="6dp" />
 
         <ImageView
             android:id="@+id/starIcon"
             android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:src="@drawable/star"
-        android:contentDescription="Star Icon" />
+            android:layout_height="28dp"
+            android:src="@drawable/star"
+            android:contentDescription="Star Icon"
+            android:layout_marginStart="6dp" />
     </LinearLayout>
 
 </LinearLayout>

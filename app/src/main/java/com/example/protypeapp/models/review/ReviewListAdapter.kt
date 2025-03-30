@@ -48,18 +48,18 @@ class ReviewListAdapter (private val context: Context, private val reviewList: M
                 holder.itemView.setBackgroundResource(R.drawable.custom_card_background)
             }
             review.isPositive -> {
-                holder.itemView.setBackgroundResource(R.drawable.positive_card_background)
+                holder.itemView.setBackgroundResource(R.drawable.neon_border_positive)
             }
             else -> {
-                holder.itemView.setBackgroundResource(R.drawable.negative_card_background)
+                holder.itemView.setBackgroundResource(R.drawable.neon_border_negative)
             }
         }
-        if(review.isGeneric){
+        if (review.isGeneric) {
             holder.imageView.setImageResource(R.drawable.robot)
-        }
-        if(!review.isGeneric){
+        } else {
             holder.imageView.setImageResource(R.drawable.person)
         }
+
     }
 
     override fun getItemCount(): Int {

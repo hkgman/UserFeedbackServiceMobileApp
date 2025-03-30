@@ -68,7 +68,7 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
     }
 
 
-    private fun setupListeners(layoutManager:LinearLayoutManager) {
+    private fun setupListeners(layoutManager: LinearLayoutManager) {
         editText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -78,60 +78,63 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
 
             override fun afterTextChanged(editable: Editable?) {
                 editable?.let {
-                    searchString=it.toString()
+                    searchString = it.toString()
                     if (searchString.isEmpty()) {
-                        currentPage=1
+                        currentPage = 1
                         loadReviews()
                     }
                 }
             }
         })
+
         buttonSearch.setOnClickListener {
+            currentPage = 1  // Сбрасываем текущую страницу
             loadReviews()
         }
-        reviewRecyclerView.addOnScrollListener(
-            object : PaginationScrollListener(layoutManager) {
-                override fun loadMoreItems() {
-                    if (currentPage < totalPages && !isLoading) {
-                        isLoading = true
-                        currentPage++
-                        loadReviews()
-                    }
+
+        reviewRecyclerView.addOnScrollListener(object : PaginationScrollListener(layoutManager) {
+            override fun loadMoreItems() {
+                if (currentPage < totalPages && !isLoading) {
+                    isLoading = true
+                    currentPage++
+                    loadReviews()
                 }
+            }
 
-                override fun isLastPage(): Boolean = currentPage >= totalPages
+            override fun isLastPage(): Boolean = currentPage >= totalPages
 
-                override fun isLoading(): Boolean = isLoading
-            })
+            override fun isLoading(): Boolean = isLoading
+        })
 
         findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout).setOnRefreshListener {
-            currentPage = 1
+            currentPage = 1  // Сбрасываем текущую страницу
             loadReviews()
             findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout).isRefreshing = false
         }
 
-        findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout).setOnRefreshListener {
-            currentPage = 1
-            loadReviews()
-            findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout).isRefreshing = false
-        }
         radioGroup.setOnCheckedChangeListener { _, _ ->
-            currentPage = 1
+            currentPage = 1  // Сбрасываем текущую страницу при смене фильтра
             loadReviews()
         }
-
     }
 
     private fun loadReviews() {
+        // Сбрасываем список отзывов перед загрузкой новых
+        if (currentPage == 1) {
+            reviewList.clear()
+            reviewListAdapter.notifyDataSetChanged()
+        }
+
         when (radioGroup.checkedRadioButtonId) {
-            R.id.radio_all -> reviewListController.fetchAllFromServer(productId, currentPage, perPage,searchString)
-            R.id.radio_positive -> reviewListController.fetchPositiveFromServer(productId, currentPage, perPage,searchString)
-            R.id.radio_ai -> reviewListController.fetchGenericFromServer(productId, currentPage, perPage,searchString)
-            R.id.radio_human -> reviewListController.fetchNotGenericFromServer(productId, currentPage, perPage,searchString)
-            R.id.radio_negative -> reviewListController.fetchNegativeFromServer(productId, currentPage, perPage,searchString)
-            else -> reviewListController.fetchAllFromServer(productId, currentPage, perPage,searchString)
+            R.id.radio_all -> reviewListController.fetchAllFromServer(productId, currentPage, perPage, searchString)
+            R.id.radio_positive -> reviewListController.fetchPositiveFromServer(productId, currentPage, perPage, searchString)
+            R.id.radio_ai -> reviewListController.fetchGenericFromServer(productId, currentPage, perPage, searchString)
+            R.id.radio_human -> reviewListController.fetchNotGenericFromServer(productId, currentPage, perPage, searchString)
+            R.id.radio_negative -> reviewListController.fetchNegativeFromServer(productId, currentPage, perPage, searchString)
+            else -> reviewListController.fetchAllFromServer(productId, currentPage, perPage, searchString)
         }
     }
+
 
     override fun onReviewsReceived(reviews: List<Review>, total: Int) {
         if (currentPage == 1) {

@@ -6,21 +6,30 @@
     android:layout_height="match_parent"
     android:background="@color/background_color">
 
+    <!-- Guideline для симметричного выравнивания -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <!-- Картинка профиля -->
     <ImageView
         android:id="@+id/ivProfileImage"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:src="@drawable/person"
         android:background="@drawable/image_background"
         android:contentDescription="Выбрать фото"
-        android:layout_marginTop="32dp"
+        android:scaleType="centerCrop"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:scaleType="centerCrop"
-        android:clickable="true"
-        android:focusable="true" />
+        android:layout_marginTop="48dp" /> <!-- Увеличили отступ сверху -->
 
+    <!-- Группа текстовых полей -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/groupTextFields"
         android:layout_width="0dp"
@@ -29,7 +38,7 @@
         app:layout_constraintBottom_toTopOf="@id/linearLayoutButtons"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.5">
+        app:layout_constraintVertical_bias="0.5"> <!-- Вертикальный центр -->
 
         <EditText
             android:id="@+id/etFullName"
@@ -60,39 +69,39 @@
             android:layout_marginTop="16dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Кнопки -->
     <LinearLayout
         android:id="@+id/linearLayoutButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
-            android:id="@+id/btnEdit"
-            android:layout_width="280dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/button_color"
-            android:text="Редактировать"
-            android:textColor="@color/white"
-            android:padding="12dp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="16dp"
-            android:enabled="false" />
+    <Button
+        android:id="@+id/btnEdit"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/button_color"
+        android:text="Редактировать"
+        android:textColor="@color/white"
+        android:padding="12dp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:enabled="false" />
 
-
-        <Button
-            android:id="@+id/btnExit"
-            android:layout_width="280dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/button_color"
-            android:text="Выйти из аккаунта"
-            android:textColor="@color/white"
-            android:padding="12dp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal" />
+    <Button
+        android:id="@+id/btnExit"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/button_color"
+        android:text="Выйти из аккаунта"
+        android:textColor="@color/white"
+        android:padding="12dp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

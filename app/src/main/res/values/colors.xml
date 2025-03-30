@@ -7,4 +7,10 @@
     <color name="background_color">#121212</color>
     <color name="hint_color">#AAAAAA</color>
     <color name="button_color">#6200EE</color>
+    <color name="neon_glow_positive">#006400</color> <!-- Тёмно-зелёный (неоновый эффект) -->
+    <color name="neon_border_positive">#00FF00</color> <!-- Ярко-зелёный контур -->
+    <color name="neon_glow_negative">#640000</color> <!-- Тёмно-красный (неоновый эффект) -->
+    <color name="neon_border_negative">#FF0000</color> <!-- Ярко-красный контур -->
+    <color name="neon_glow">#00008B</color> <!-- Темно-синий неоновый эффект -->
+    <color name="neon_border">#00BFFF</color> <!-- Голубой контур -->
 </resources>

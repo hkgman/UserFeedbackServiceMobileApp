@@ -16,6 +16,9 @@
         android:theme="@style/Theme.ProtypeApp"
         tools:targetApi="31">
         <activity
+            android:name=".ItemFilter"
+            android:exported="false" />
+        <activity
             android:name=".ReviewListActivity"
             android:exported="false" />
         <activity
