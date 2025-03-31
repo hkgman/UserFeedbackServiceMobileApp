@@ -29,6 +29,7 @@ class HomeActivity : AppCompatActivity(), HomeListener {
     private lateinit var productList: MutableList<Product>
     private lateinit var productRecyclerView: RecyclerView
     private var currentPage = 1
+    private var hasLoadedData = false
     private val perPage = 4
     private var isLoading = false
     private var totalPages = 1
@@ -40,15 +41,12 @@ class HomeActivity : AppCompatActivity(), HomeListener {
         homeController.checkAuthorization()
 
         setupViews()
-
-        loadProducts()
-        homeController.fetchUserInfo()
     }
 
     override fun onResume() {
         super.onResume()
         currentPage = 1
-        homeController.fetchProducts()
+        loadProducts()
         homeController.fetchUserInfo()
     }
 
