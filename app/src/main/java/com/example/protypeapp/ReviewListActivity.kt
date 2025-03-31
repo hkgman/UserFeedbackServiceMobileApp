@@ -97,8 +97,8 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
 
             override fun afterTextChanged(editable: Editable?) {
                 editable?.let {
-                    searchString = it.toString()
-                    if (searchString.isEmpty()) {
+                    if (it.toString().isEmpty()) {
+                        searchString=it.toString()
                         currentPage = 1
                         loadReviews()
                     }
@@ -107,6 +107,7 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
         })
 
         buttonSearch.setOnClickListener {
+            searchString=editText.text.toString()
             currentPage = 1  // Сбрасываем текущую страницу
             loadReviews()
         }

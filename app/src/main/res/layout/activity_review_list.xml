@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
+        android:background="@drawable/custom_card_background"
         android:orientation="horizontal"
         android:gravity="start">
         <EditText
@@ -39,19 +40,14 @@
             android:padding="12dp"
             android:textStyle="bold" />
     </LinearLayout>
-    <HorizontalScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/filterRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fillViewport="true"
-        android:scrollbars="none">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/filterRecyclerView"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="false"
-            android:layout_marginTop="16dp" />
-    </HorizontalScrollView>
+        android:orientation="horizontal"
+        android:overScrollMode="never"
+        android:paddingVertical="8dp"
+        tools:listitem="@layout/activity_item_filter" />
     <TextView
         android:id="@+id/tv_no_items"
         android:layout_width="wrap_content"
