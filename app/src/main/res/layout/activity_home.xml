@@ -80,6 +80,15 @@
             android:padding="12dp"
             android:textStyle="bold" />
     </LinearLayout>
+    <TextView
+        android:id="@+id/tv_no_items"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Пока нет товаров"
+        android:textSize="16sp"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:padding="10dp"
         android:id="@+id/swipeRefreshLayout"

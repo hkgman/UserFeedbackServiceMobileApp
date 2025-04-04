@@ -28,6 +28,7 @@ class HomeActivity : AppCompatActivity(), HomeListener {
     private lateinit var productAdapter: ProductAdapter
     private lateinit var productList: MutableList<Product>
     private lateinit var productRecyclerView: RecyclerView
+    private lateinit var view: TextView
     private var currentPage = 1
     private var hasLoadedData = false
     private val perPage = 4
@@ -51,6 +52,7 @@ class HomeActivity : AppCompatActivity(), HomeListener {
     }
 
     private fun setupViews() {
+        view = findViewById(R.id.tv_no_items)
         productRecyclerView = findViewById(R.id.productRecyclerView)
         productList = mutableListOf()
         productAdapter = ProductAdapter(this, productList)
@@ -126,15 +128,21 @@ class HomeActivity : AppCompatActivity(), HomeListener {
         imageView.setImageBitmap(bitmap ?: BitmapFactory.decodeResource(resources, R.drawable.person))
     }
 
-    override fun onProductsReceived(products: List<Product>,total:Int) {
-        if (currentPage == 1) {
-            productList.clear()
+    override fun onProductsReceived(products: List<Product>, total: Int, page: Int) {
+        if (page == 1) {
+            productAdapter.updateItems(products.toMutableList())
+        } else {
+            val currentItems = productAdapter.getItems().toMutableList()
+            currentItems.addAll(products)
+            productAdapter.updateItems(currentItems)
         }
-        productList.addAll(products)
-        productAdapter.notifyDataSetChanged()
+
         isLoading = false
-        totalPages=total
+        totalPages = total
+
+        view.visibility = if (productAdapter.itemCount == 0) View.VISIBLE else View.GONE
     }
+
 
     override fun onProductAdded() {
         showToast("Продукт добавлен")

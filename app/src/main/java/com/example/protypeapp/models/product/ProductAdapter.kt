@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.protypeapp.R
+import com.example.protypeapp.models.review.Review
 import com.squareup.picasso.Picasso
 
 class ProductAdapter(private val context: Context, private val productList: MutableList<Product>) :
@@ -69,14 +70,17 @@ class ProductAdapter(private val context: Context, private val productList: Muta
         }
     }
 
-
+    fun getItems(): List<Product> {
+        return productList
+    }
     override fun getItemCount(): Int {
         return productList.size
     }
 
-    fun addProduct(product: Product) {
-        productList.add(product)
-        notifyItemInserted(productList.size - 1)
+    fun updateItems(newItems: List<Product>) {
+        productList.clear()
+        productList.addAll(newItems)
+        notifyDataSetChanged()
     }
 
 }

@@ -7,7 +7,7 @@ import com.example.protypeapp.models.user.UserInfo
 interface HomeListener {
     fun onUserInfoReceived(user: UserInfo)
     fun onUserImageReceived(bitmap: Bitmap?)
-    fun onProductsReceived(products: List<Product>,totalPages: Int)
+    fun onProductsReceived(products: List<Product>,totalPages: Int,page:Int)
     fun onProductAdded()
     fun onProductDeleted()
     fun onUserNotAuthorized()

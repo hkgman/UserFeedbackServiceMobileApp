@@ -55,7 +55,7 @@ class HomeController(private val context: Context, private val listener: HomeLis
                     val productResponse = response.body()
                     val products = productResponse?.products ?: emptyList()
                     if (productResponse != null) {
-                        listener.onProductsReceived(products,productResponse.total)
+                        listener.onProductsReceived(products,productResponse.total,productResponse.currentPage)
                     }
                 } else {
                     handleErrorResponse(response)
