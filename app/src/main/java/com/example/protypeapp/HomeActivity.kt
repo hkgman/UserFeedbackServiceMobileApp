@@ -67,9 +67,11 @@ class HomeActivity : AppCompatActivity(), HomeListener {
 
         findViewById<Button>(R.id.btnAdd).setOnClickListener {
             val productName = findViewById<EditText>(R.id.etTextField).text.toString()
+            if(productName.isEmpty()){
+                showToast("Введите ссылку.")
+            }
             if (productName.isNotEmpty()) {
                 val newProduct = ProductAdd("productName", "New Supplier", "New Supplier", "Skibidi", productName)
-                Log.d("dff",productName)
                 homeController.addProduct(newProduct)
                 findViewById<EditText>(R.id.etTextField).text.clear()
             }

@@ -29,7 +29,7 @@ class ReviewListController(private val context: Context,private var  reviewListL
                     val reviewResponse = response.body()
                     val reviews = reviewResponse?.reviews ?: emptyList()
                     if (reviewResponse != null) {
-                        reviewListListener.onReviewsReceived(reviews,reviewResponse.total)
+                        reviewListListener.onReviewsReceived(reviews,reviewResponse.total,reviewResponse.currentPage)
                     }
                 } else {
                     handleErrorResponse(response)
@@ -51,7 +51,7 @@ class ReviewListController(private val context: Context,private var  reviewListL
                     val reviewResponse = response.body()
                     val reviews = reviewResponse?.reviews ?: emptyList()
                     if (reviewResponse != null) {
-                        reviewListListener.onReviewsReceived(reviews,reviewResponse.total)
+                        reviewListListener.onReviewsReceived(reviews,reviewResponse.total,reviewResponse.currentPage)
                     }
                 } else {
                     handleErrorResponse(response)
@@ -72,7 +72,7 @@ class ReviewListController(private val context: Context,private var  reviewListL
                     val reviewResponse = response.body()
                     val reviews = reviewResponse?.reviews ?: emptyList()
                     if (reviewResponse != null) {
-                        reviewListListener.onReviewsReceived(reviews,reviewResponse.total)
+                        reviewListListener.onReviewsReceived(reviews,reviewResponse.total,reviewResponse.currentPage)
                     }
                 } else {
                     handleErrorResponse(response)
@@ -94,7 +94,7 @@ class ReviewListController(private val context: Context,private var  reviewListL
                     val reviewResponse = response.body()
                     val reviews = reviewResponse?.reviews ?: emptyList()
                     if (reviewResponse != null) {
-                        reviewListListener.onReviewsReceived(reviews,reviewResponse.total)
+                        reviewListListener.onReviewsReceived(reviews,reviewResponse.total,reviewResponse.currentPage)
                     }
                 } else {
                     handleErrorResponse(response)
@@ -115,7 +115,7 @@ class ReviewListController(private val context: Context,private var  reviewListL
                     val reviewResponse = response.body()
                     val reviews = reviewResponse?.reviews ?: emptyList()
                     if (reviewResponse != null) {
-                        reviewListListener.onReviewsReceived(reviews,reviewResponse.total)
+                        reviewListListener.onReviewsReceived(reviews,reviewResponse.total,reviewResponse.currentPage)
                     }
                 } else {
                     handleErrorResponse(response)

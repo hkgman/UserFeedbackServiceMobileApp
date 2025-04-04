@@ -62,6 +62,10 @@ class ReviewListAdapter (private val context: Context, private val reviewList: M
 
     }
 
+    fun getItems(): List<Review> {
+        return reviewList
+    }
+
     override fun getItemCount(): Int {
         return reviewList.size
     }

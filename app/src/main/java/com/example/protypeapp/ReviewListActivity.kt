@@ -108,6 +108,9 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
 
         buttonSearch.setOnClickListener {
             searchString=editText.text.toString()
+            if(searchString.isEmpty()){
+                showToast("Введите автора отзыва.")
+            }
             currentPage = 1  // Сбрасываем текущую страницу
             loadReviews()
         }
@@ -150,20 +153,22 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
     }
 
 
-    override fun onReviewsReceived(reviews: List<Review>, total: Int) {
-        if (currentPage == 1) {
-            reviewList.clear()
-        }
-        reviewList.addAll(reviews)
-        reviewListAdapter.notifyDataSetChanged()
-        isLoading = false
-        totalPages=total
-        if (reviews.isEmpty()) {
-            view.visibility = View.VISIBLE
+    override fun onReviewsReceived(reviews: List<Review>, total: Int, page: Int) {
+        if (page == 1) {
+            reviewListAdapter.updateItems(reviews.toMutableList())
         } else {
-            view.visibility = View.GONE
+            val currentItems = reviewListAdapter.getItems().toMutableList()
+            currentItems.addAll(reviews)
+            reviewListAdapter.updateItems(currentItems)
         }
+
+        isLoading = false
+        totalPages = total
+
+        view.visibility = if (reviewListAdapter.itemCount == 0) View.VISIBLE else View.GONE
     }
+
+
 
     override fun onUnauthorized() {
         val intent = Intent(this@ReviewListActivity, MainActivity::class.java)
