@@ -30,7 +30,6 @@ class HomeActivity : AppCompatActivity(), HomeListener {
     private lateinit var productRecyclerView: RecyclerView
     private lateinit var view: TextView
     private var currentPage = 1
-    private var hasLoadedData = false
     private val perPage = 4
     private var isLoading = false
     private var totalPages = 1
