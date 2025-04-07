@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -117,14 +118,14 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
 
         reviewRecyclerView.addOnScrollListener(object : PaginationScrollListener(layoutManager) {
             override fun loadMoreItems() {
-                if (currentPage < totalPages && !isLoading) {
-                    isLoading = true
+                if (!isLoading && currentPage < totalPages) {
                     currentPage++
                     loadReviews()
                 }
             }
 
             override fun isLastPage(): Boolean = currentPage >= totalPages
+
 
             override fun isLoading(): Boolean = isLoading
         })
@@ -137,10 +138,12 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
     }
 
     private fun loadReviews() {
+        if (isLoading) return
         if (currentPage == 1) {
             reviewList.clear()
             reviewListAdapter.notifyDataSetChanged()
         }
+        isLoading = true
 
         when (selectedFilter) {
             0 -> reviewListController.fetchAllFromServer(productId, currentPage, perPage, searchString)
@@ -153,7 +156,11 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
     }
 
 
+
     override fun onReviewsReceived(reviews: List<Review>, total: Int, page: Int) {
+        Log.d("ReviewListActivity", "Reviews received: page=$page, total=$total")
+        isLoading = false
+
         if (page == 1) {
             reviewListAdapter.updateItems(reviews.toMutableList())
         } else {
@@ -161,12 +168,11 @@ class ReviewListActivity : AppCompatActivity(), ReviewListListener {
             currentItems.addAll(reviews)
             reviewListAdapter.updateItems(currentItems)
         }
-
-        isLoading = false
         totalPages = total
 
         view.visibility = if (reviewListAdapter.itemCount == 0) View.VISIBLE else View.GONE
     }
+
 
 
 
