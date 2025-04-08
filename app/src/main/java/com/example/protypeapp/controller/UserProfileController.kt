@@ -58,6 +58,11 @@ class UserProfileController(private val context: Context, private val listener: 
             override fun onResponse(call: Call<UpdateUserResponse>, response: Response<UpdateUserResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let {
+                        if (it.token != null) {
+                            userPreferences.logout()
+                            userPreferences.saveToken(it.token)
+                            userPreferences.saveLoginStatus(true)
+                        }
                         listener.showMessage(it.message)
                     } ?: listener.showError("Не удалось обновить пользователя")
                 } else {
