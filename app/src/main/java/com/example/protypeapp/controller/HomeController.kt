@@ -10,10 +10,15 @@ import com.example.protypeapp.models.product.ProductResponse
 import com.example.protypeapp.models.user.UserInfo
 import com.example.protypeapp.userStorage.UserPreferences
 import com.example.protypeapp.utils.Utils
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
+
 
 class HomeController(private val context: Context, private val listener: HomeListener) {
     private val apiService = ApiClient.getClient(context).create(ApiService::class.java)
@@ -71,8 +76,8 @@ class HomeController(private val context: Context, private val listener: HomeLis
     fun addProduct(newProduct: ProductAdd) {
         val call = apiService.addProduct(newProduct)
 
-        call.enqueue(object : Callback<Product> {
-            override fun onResponse(call: Call<Product>, response: Response<Product>) {
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     listener.onProductAdded()
                     fetchProducts()
@@ -81,11 +86,34 @@ class HomeController(private val context: Context, private val listener: HomeLis
                 }
             }
 
-            override fun onFailure(call: Call<Product>, t: Throwable) {
+            override fun onFailure(call: Call<Void>, t: Throwable) {
                 listener.onError("Ошибка сети: ${t.message}")
             }
         })
     }
+
+    fun addProductCsv(file: File){
+        val mediaType = MediaType.parse("application/octet-stream")
+        val requestFile = RequestBody.create(mediaType, file)
+        val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+        val call = apiService.addProductCsv(body)
+
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    listener.onProductAdded()
+                    fetchProducts()
+                } else {
+                    handleErrorResponse(response)
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                listener.onError("Ошибка сети: ${t.message}")
+            }
+        })
+    }
+
 
     fun deleteProduct(product: Product) {
         val call = apiService.deleteProduct(product.id)

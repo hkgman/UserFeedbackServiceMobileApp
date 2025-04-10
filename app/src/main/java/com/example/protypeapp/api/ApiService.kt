@@ -1,22 +1,27 @@
 package com.example.protypeapp.api
 
-import com.example.protypeapp.models.statistic.GraphData
 import com.example.protypeapp.models.product.Product
 import com.example.protypeapp.models.product.ProductAdd
 import com.example.protypeapp.models.product.ProductResponse
 import com.example.protypeapp.models.review.ReviewResponse
+import com.example.protypeapp.models.statistic.GraphData
 import com.example.protypeapp.models.statistic.StatisticResponse
 import com.example.protypeapp.models.user.UpdateUserRequest
 import com.example.protypeapp.models.user.UpdateUserResponse
 import com.example.protypeapp.models.user.UserInfo
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+
 
 interface ApiService {
 
@@ -25,7 +30,11 @@ interface ApiService {
     fun getProducts(@Query("page") page: Int,
                     @Query("per_page") perPage: Int): Call<ProductResponse>
     @POST("/products/")
-    fun addProduct(@Body product: ProductAdd): Call<Product>
+    fun addProduct(@Body product: ProductAdd): Call<Void>
+
+    @Multipart
+    @POST("/products/csv")
+    fun addProductCsv(@Part file: MultipartBody.Part?): Call<Void>
     @DELETE("/products/{id}")
     fun deleteProduct(@Path("id") productId: Int): Call<Unit>
     //reviews

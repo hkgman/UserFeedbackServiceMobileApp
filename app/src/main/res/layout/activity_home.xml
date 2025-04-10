@@ -75,6 +75,18 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="+"
+            android:minWidth="0dp"
+            android:backgroundTint="@color/button_color"
+            android:textColor="@color/white"
+            android:padding="12dp"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/btnAddCsv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:minWidth="0dp"
+            android:text="CSV"
             android:backgroundTint="@color/button_color"
             android:textColor="@color/white"
             android:padding="12dp"

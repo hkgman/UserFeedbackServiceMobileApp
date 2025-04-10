@@ -2,8 +2,10 @@ package com.example.protypeapp
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.os.FileUtils
+import android.provider.OpenableColumns
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -13,7 +15,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.protypeapp.controller.HomeController
 import com.example.protypeapp.controller.listeners.HomeListener
@@ -22,6 +23,8 @@ import com.example.protypeapp.models.product.ProductAdapter
 import com.example.protypeapp.models.product.ProductAdd
 import com.example.protypeapp.models.user.UserInfo
 import com.example.protypeapp.utils.PaginationScrollListener
+import java.io.File
+import java.io.FileOutputStream
 
 class HomeActivity : AppCompatActivity(), HomeListener {
     private lateinit var homeController: HomeController
@@ -78,6 +81,14 @@ class HomeActivity : AppCompatActivity(), HomeListener {
             }
         }
 
+        findViewById<Button>(R.id.btnAddCsv).setOnClickListener {
+            val intent = Intent()
+                .setType("*/*")
+                .setAction(Intent.ACTION_GET_CONTENT)
+
+            startActivityForResult(Intent.createChooser(intent, "Select a file"), 111)
+        }
+
         productRecyclerView.addOnScrollListener(
             object : PaginationScrollListener(layoutManager) {
                 override fun loadMoreItems() {
@@ -115,6 +126,60 @@ class HomeActivity : AppCompatActivity(), HomeListener {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == Companion.REQUEST_CODE_PICK_FILE && resultCode == RESULT_OK) {
+            val selectedFileUri = data?.data
+
+            if (selectedFileUri != null) {
+                try {
+                    val contentResolver = contentResolver
+                    val inputStream = contentResolver.openInputStream(selectedFileUri)
+                    if (inputStream != null) {
+                        val fileName = getFileNameFromUri(selectedFileUri) ?: "temp.csv"
+
+                        val extension = fileName.substringAfterLast(".", "csv")
+
+                        val tempFile = File(cacheDir, "temp.$extension")
+
+                        inputStream.copyTo(tempFile.outputStream())
+                        homeController.addProductCsv(tempFile)
+                        inputStream.close()
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    private fun getFileNameFromUri(uri: Uri): String? {
+        var name: String? = null
+        if (uri.scheme == "content") {
+            val cursor = contentResolver.query(uri, null, null, null, null)
+            cursor?.use {
+                if (it.moveToFirst()) {
+                    val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                    if (nameIndex != -1) {
+                        name = it.getString(nameIndex)
+                    }
+                }
+            }
+        }
+        if (name == null) {
+            name = uri.path
+            val cut = name?.lastIndexOf('/')
+            if (cut != -1 && cut != null) {
+                name = name?.substring(cut + 1)
+            }
+        }
+        return name
+    }
+
+    companion object {
+        private const val REQUEST_CODE_PICK_FILE = 111
+    }
     private fun loadProducts() {
         homeController.fetchProducts(currentPage, perPage)
     }
