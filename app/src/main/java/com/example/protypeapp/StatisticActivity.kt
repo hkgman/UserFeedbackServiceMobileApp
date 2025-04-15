@@ -2,6 +2,7 @@ package com.example.protypeapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -23,6 +24,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 class StatisticActivity : AppCompatActivity(),StatisticListener {
     private lateinit var statisticController: StatisticController
     private lateinit var buttonAll: Button
+    private lateinit var view: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_statistic)
@@ -33,7 +35,7 @@ class StatisticActivity : AppCompatActivity(),StatisticListener {
 
     private fun setupViews() {
         buttonAll = findViewById<Button>(R.id.buttonAll)
-
+        view = findViewById(R.id.tv_no_items)
         buttonAll.setOnClickListener {
             navigateToReviewActivity(ReviewListActivity::class.java)
         }
@@ -162,6 +164,7 @@ class StatisticActivity : AppCompatActivity(),StatisticListener {
             val adapter = ProblemAdapter(it.topProblems)
             recyclerView.adapter = adapter
             answerText.text = it.answer
+            view.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
         }
     }
     override fun onError(message: String) {
