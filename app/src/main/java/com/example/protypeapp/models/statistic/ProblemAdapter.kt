@@ -1,5 +1,6 @@
 package com.example.protypeapp.models.statistic
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ class ProblemAdapter(private val problems: List<String>) : RecyclerView.Adapter<
 
             fun bind(problem: String) {
             textView.text = problem
+            textView.setTextColor(Color.WHITE)
         }
     }
 }
